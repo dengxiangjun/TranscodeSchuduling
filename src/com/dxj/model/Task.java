@@ -6,10 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Task {
-    private String name;
-    private int complexity;
-    private Node executeNode;
+    private String name;//任务名称
+    private int complexity;//任务复杂度
+    private Node executeNode;//任务执行的结点
     private List<Integer> subComplexitys = new ArrayList<>();
+    private Node location;//任务（视频分片）所在位置
 
 
     public String getName() {
@@ -60,7 +61,7 @@ public class Task {
     }
 
     /**
-     * 子任务初始化，把一个任务未复杂度complexity初始化为n个子任务，子任务复杂度大小是随机的
+     * 子任务初始化，把一个任务为复杂度complexity初始化为n个子任务，子任务复杂度大小是随机的
      *
      * @param low_bound   分片粒度的下界
      * @param upper_bound 分片粒度的上界

@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Node {
-    private String name;
-    private double capacity;
-    private double ft;
-    private List<Task> tasks = new ArrayList<>();
+    private String name;//结点名称
+    private double capacity;//转码速度
+    private double ft;//转码完成时间
+    private List<Task> tasks = new ArrayList<>();//分配的任务集
 
 
     public double getFt() {

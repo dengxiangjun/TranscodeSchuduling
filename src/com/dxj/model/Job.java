@@ -3,8 +3,8 @@ package com.dxj.model;
 import java.util.List;
 
 public class Job {
-    private List<Node> nodes;
-    private List<Task> tasks;
+    private List<Node> nodes;//作业的可用结点
+    private List<Task> tasks;//作业的任务集
 
     public Job(List<Node> nodes, List<Task> tasks) {
         this.nodes = nodes;
