@@ -109,57 +109,62 @@ public class MLFT {
                 }
             }
 
-            double k_maxFt = Double.MIN_VALUE, k_minFt = Double.MAX_VALUE;
-            int k_maxFt_index = 0, k_minFt_index = 0;
-            for (int i = 0; i < m; i++) {
-                Node node = nodes.get(i);
-                double ft = node.getFt();
-                if (k_maxFt < ft) {
-                    k_maxFt_index = i;
-                    k_maxFt = ft;
-                }
-                if (k_minFt > ft) {
-                    k_minFt_index = i;
-                    k_minFt = ft;
-                }
+            double k_max_ft = Double.MIN_VALUE;
+            for (Node node:nodes){
+                k_max_ft = Math.max(k_max_ft,node.getFt());
             }
-            System.out.println("最长队列与最短队列重分布前： f_average_k: " + f_average_k + "; f_average: " + f_average + "; k_maxFt: " + k_maxFt);
-            List<Task> boundTasks = new ArrayList<>();
-            Node maxFt_node = nodes.get(k_maxFt_index),minFt_node = nodes.get(k_minFt_index);
-            boundTasks.addAll(maxFt_node.getTasks());
-            boundTasks.addAll(minFt_node.getTasks());
-
-            maxFt_node.setTasks(new ArrayList<>());
-            minFt_node.setTasks(new ArrayList<>());
-
-            Collections.sort(boundTasks, new Comparator<Task>() {
-                @Override
-                public int compare(Task o1, Task o2) {
-                    return o1.getComplexity() <= o2.getComplexity() ? 1 : -1;
-                }
-            });
-
-            for (Task task : boundTasks){
-                double max_node_ft = maxFt_node.getFt() + task.getComplexity() / maxFt_node.getCapacity() + delay;
-                double min_node_ft = minFt_node.getFt() + task.getComplexity() / minFt_node.getCapacity() + delay;
-                Node selectedNode;
-                double selectedFt;
-                if (max_node_ft > min_node_ft){
-                    selectedNode = minFt_node;
-                    selectedFt = min_node_ft;
-                }else {
-                    selectedNode = maxFt_node;
-                    selectedFt = max_node_ft;
-                }
-                List<Task> nodeTasks = selectedNode.getTasks();
-                nodeTasks.add(task);
-                selectedNode.setTasks(nodeTasks);
-                selectedNode.setFt(selectedFt);
-            }
-            k_maxFt = Double.MIN_VALUE;
-            for (Node node : nodes) k_maxFt = Math.max(k_maxFt,node.getFt());
-            System.out.println("最长队列与最短队列重分布后： f_average_k: " + f_average_k + "; f_average: " + f_average + "; k_maxFt: " + k_maxFt);
-            jobFt = Math.min(k_maxFt, jobFt);
+            jobFt = Math.min(jobFt,k_max_ft);
+//            double k_maxFt = Double.MIN_VALUE, k_minFt = Double.MAX_VALUE;
+//            int k_maxFt_index = 0, k_minFt_index = 0;
+//            for (int i = 0; i < m; i++) {
+//                Node node = nodes.get(i);
+//                double ft = node.getFt();
+//                if (k_maxFt < ft) {
+//                    k_maxFt_index = i;
+//                    k_maxFt = ft;
+//                }
+//                if (k_minFt > ft) {
+//                    k_minFt_index = i;
+//                    k_minFt = ft;
+//                }
+//            }
+//            System.out.println("最长队列与最短队列重分布前： f_average_k: " + f_average_k + "; f_average: " + f_average + "; k_maxFt: " + k_maxFt);
+//            List<Task> boundTasks = new ArrayList<>();
+//            Node maxFt_node = nodes.get(k_maxFt_index),minFt_node = nodes.get(k_minFt_index);
+//            boundTasks.addAll(maxFt_node.getTasks());
+//            boundTasks.addAll(minFt_node.getTasks());
+//
+//            maxFt_node.setTasks(new ArrayList<>());
+//            minFt_node.setTasks(new ArrayList<>());
+//
+//            Collections.sort(boundTasks, new Comparator<Task>() {
+//                @Override
+//                public int compare(Task o1, Task o2) {
+//                    return o1.getComplexity() <= o2.getComplexity() ? 1 : -1;
+//                }
+//            });
+//
+//            for (Task task : boundTasks){
+//                double max_node_ft = maxFt_node.getFt() + task.getComplexity() / maxFt_node.getCapacity() + delay;
+//                double min_node_ft = minFt_node.getFt() + task.getComplexity() / minFt_node.getCapacity() + delay;
+//                Node selectedNode;
+//                double selectedFt;
+//                if (max_node_ft > min_node_ft){
+//                    selectedNode = minFt_node;
+//                    selectedFt = min_node_ft;
+//                }else {
+//                    selectedNode = maxFt_node;
+//                    selectedFt = max_node_ft;
+//                }
+//                List<Task> nodeTasks = selectedNode.getTasks();
+//                nodeTasks.add(task);
+//                selectedNode.setTasks(nodeTasks);
+//                selectedNode.setFt(selectedFt);
+//            }
+//            k_maxFt = Double.MIN_VALUE;
+//            for (Node node : nodes) k_maxFt = Math.max(k_maxFt,node.getFt());
+//            System.out.println("最长队列与最短队列重分布后： f_average_k: " + f_average_k + "; f_average: " + f_average + "; k_maxFt: " + k_maxFt);
+//            jobFt = Math.min(k_maxFt, jobFt);
         }
         return jobFt;
     }

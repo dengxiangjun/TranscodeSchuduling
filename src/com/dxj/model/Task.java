@@ -8,10 +8,26 @@ import java.util.List;
 public class Task {
     private String name;//任务名称
     private int complexity;//任务复杂度
-    private Node executeNode;//任务执行的结点
-    private List<Integer> subComplexitys = new ArrayList<>();
     private Node location;//任务（视频分片）所在位置
+    private Node executeNode;//任务执行的结点
+    private double makespan;
+    private List<Integer> subComplexitys = new ArrayList<>();
 
+    public double getMakespan() {
+        return makespan;
+    }
+
+    public void setMakespan(double makespan) {
+        this.makespan = makespan;
+    }
+
+    public Node getLocation() {
+        return location;
+    }
+
+    public void setLocation(Node location) {
+        this.location = location;
+    }
 
     public String getName() {
         return name;
@@ -56,7 +72,10 @@ public class Task {
         return "Task{" +
                 "name='" + name + '\'' +
                 ", complexity=" + complexity +
+                ", location=" + location +
                 ", executeNode=" + executeNode +
+                ", makespan=" + makespan +
+                ", subComplexitys=" + subComplexitys +
                 '}';
     }
 

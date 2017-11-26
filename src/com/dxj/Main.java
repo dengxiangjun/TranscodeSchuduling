@@ -3,6 +3,7 @@ package com.dxj;
 import com.dxj.model.Job;
 import com.dxj.model.Node;
 import com.dxj.model.Task;
+import com.dxj.scheduler.CoarseGrainedSegment;
 import com.dxj.scheduler.MCT;
 import com.dxj.scheduler.MLFT;
 import com.dxj.scheduler.MaxMCT;
@@ -15,10 +16,10 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-        List<Node> nodes = new ArrayList<>(), nodes1 = new ArrayList<>(), nodes2 = new ArrayList<>();
-        List<Task> tasks = new ArrayList<>(), tasks1 = new ArrayList<>(), tasks2 = new ArrayList<>();
+        List<Node> nodes = new ArrayList<>(), nodes1 = new ArrayList<>(), nodes2 = new ArrayList<>(),nodes3 = new ArrayList<>();
+        List<Task> tasks = new ArrayList<>(), tasks1 = new ArrayList<>(), tasks2 = new ArrayList<>(),tasks3 = new ArrayList<>();
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 15; i++) {
             double capacity = Random.nextDouble(1.0, 3.0);
             Node node = new Node("node_" + i, capacity);
             nodes.add(node);
@@ -28,9 +29,12 @@ public class Main {
 
             Node node2 = new Node("node2_" + i, capacity);
             nodes2.add(node2);
+
+            Node node3 = new Node("node3_" + i, capacity);
+            nodes3.add(node3);
         }
 
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 3000; i++) {
             int complexity = Random.nextInt(15, 3600);
             Task task = new Task("task_" + i, complexity);
             tasks.add(task);
@@ -41,6 +45,9 @@ public class Main {
             Task task2 = new Task("task2_" + i, complexity);
             task2.initSubTask(1,150);
             tasks2.add(task2);
+
+            Task task3 = new Task("task3_" + i, complexity);
+            tasks3.add(task3);
         }
 
         Job job = new Job(nodes, tasks);
@@ -58,5 +65,10 @@ public class Main {
         MLFT mlft = new MLFT();
         double mlftFt = mlft.schedule(job2);
         System.out.println(mlftFt);
+
+        Job job3 = new Job(nodes3,tasks3);
+        CoarseGrainedSegment cgs = new CoarseGrainedSegment();
+        double cgsFt = cgs.schedule(job3);
+        System.out.println(cgsFt);
     }
 }
