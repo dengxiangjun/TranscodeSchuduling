@@ -78,6 +78,13 @@ public class MLFT {
             int n = newTasks.size();
             double f_average_k = sumComplexity / sumCapacity + delay * n / m;
 
+//            int subSetComplexity = 0 ,s = 8;
+//            for (int i = 0;i<=s;i++){
+//                subSetComplexity += newTasks.get(i).getComplexity();
+//            }
+//
+//            double subSet_average = subSetComplexity/sumCapacity + s* delay/m;
+            //if (subSet_average > )
             int j = 0;
             for (int i = 0; i < n; ) {
                 Task task = newTasks.get(i);
