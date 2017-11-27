@@ -6,7 +6,8 @@ import java.util.List;
 public class Node {
     private String name;//结点名称
     private double capacity;//转码速度
-    private double ft;//转码完成时间
+    private double ft;//结点上所有子任务转码完成时间
+    private Rack rack;
     private List<Task> tasks = new ArrayList<>();//分配的任务集
 
 
@@ -14,8 +15,22 @@ public class Node {
         return ft;
     }
 
+    public Rack getRack() {
+        return rack;
+    }
+
+    public void setRack(Rack rack) {
+        this.rack = rack;
+    }
+
     public void setFt(double ft) {
         this.ft = ft;
+    }
+
+    public Node(String name, double capacity, Rack rack) {
+        this.name = name;
+        this.capacity = capacity;
+        this.rack = rack;
     }
 
     public Node(String name, double capacity) {
@@ -53,7 +68,29 @@ public class Node {
                 "name='" + name + '\'' +
                 ", capacity=" + capacity +
                 ", ft=" + ft +
-                ", tasks=" + tasks +
+                ", rack=" + rack +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Node node = (Node) o;
+
+        if (Double.compare(node.capacity, capacity) != 0) return false;
+        return !(name != null ? !name.equals(node.name) : node.name != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = name != null ? name.hashCode() : 0;
+        temp = Double.doubleToLongBits(capacity);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
     }
 }

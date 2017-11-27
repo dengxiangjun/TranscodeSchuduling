@@ -1,4 +1,4 @@
-package com.dxj;
+package com.dxj.experiment;
 
 import com.dxj.model.Job;
 import com.dxj.model.Node;
@@ -9,7 +9,9 @@ import com.dxj.util.Random;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * 不考虑分片的通信开销和数据本地性
+ */
 public class Main {
 
     public static void main(String[] args) {

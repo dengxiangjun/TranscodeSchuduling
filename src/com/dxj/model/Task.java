@@ -8,25 +8,35 @@ import java.util.List;
 public class Task {
     private String name;//任务名称
     private int complexity;//任务复杂度
-    private Node location;//任务（视频分片）所在位置
+    private List<Node> location;//任务（视频分片）所在位置
     private Node executeNode;//任务执行的结点
-    private double makespan;
-    private List<Integer> subComplexitys = new ArrayList<>();
+    private double makespan;//任务的执行时间
+
+    public int getSegmentSize() {
+        return segmentSize;
+    }
+
+    public void setSegmentSize(int segmentSize) {
+        this.segmentSize = segmentSize;
+    }
+
+    private int segmentSize;//分片大小(MB)
+    private List<Integer> subComplexitys = new ArrayList<>();//I帧刻度值
 
     public double getMakespan() {
         return makespan;
     }
 
-    public void setMakespan(double makespan) {
-        this.makespan = makespan;
-    }
-
-    public Node getLocation() {
+    public List<Node> getLocation() {
         return location;
     }
 
-    public void setLocation(Node location) {
+    public void setLocation(List<Node> location) {
         this.location = location;
+    }
+
+    public void setMakespan(double makespan) {
+        this.makespan = makespan;
     }
 
     public String getName() {
@@ -63,8 +73,13 @@ public class Task {
 
     public Task(String name, int complexity) {
         this.name = name;
-
         this.complexity = complexity;
+    }
+
+    public Task(String name, int complexity, List<Node> location) {
+        this.name = name;
+        this.complexity = complexity;
+        this.location = location;
     }
 
     @Override

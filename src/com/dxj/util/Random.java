@@ -1,6 +1,7 @@
 package com.dxj.util;
 
 public class Random {
+
     public static double nextDouble(double origin, double bound) {
         java.util.Random random = new java.util.Random();
         double r = random.nextDouble();
@@ -12,6 +13,12 @@ public class Random {
         return r;
     }
 
+    /**
+     *
+     * @param origin 下界
+     * @param bound 上界，随机生成的最大值不会等于bound
+     * @return
+     */
     public static int nextInt(int origin, int bound) {
         java.util.Random random = new java.util.Random();
         if (origin < bound) {
