@@ -43,7 +43,7 @@ public class MergeMaxMCT {
         tolalTask.setSubComplexitys(toalSubComplexitys);
         double jobFt = Double.MAX_VALUE;
         int m = nodes.size(), k_th_max = 40;
-        double delay = 20;
+        double delay = 5;
         for (int k_th = 1; k_th < k_th_max; k_th++) {
             for (Node node : nodes) {
                 node.setFt(0d);

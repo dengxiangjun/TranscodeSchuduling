@@ -1,8 +1,9 @@
-package com.dxj.scheduler;
+package com.dxj.scheduler.locality;
 
 import com.dxj.model.Job;
 import com.dxj.model.Node;
 import com.dxj.model.Task;
+import com.dxj.util.TaskUtil;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -10,9 +11,9 @@ import java.util.List;
 
 /**
  * Parallelizing Video Transcoding Using Map-Reduce-Based Cloud Computing
- * MaxMCT调度算法
+ * LocalityMaxMCT调度算法
  */
-public class MaxMCT {
+public class LMaxMCT {
 
     public double schedule(Job job) {
         List<Task> tasks = job.getTasks();
@@ -46,7 +47,8 @@ public class MaxMCT {
             Task task = tasks.get(i);
             if (j < m) {
                 Node node = nodes.get(j);
-                double ft = node.getFt() + task.getComplexity() / node.getCapacity() + delay;
+                double comm = TaskUtil.getCommnicationTime(task, node);
+                double ft = node.getFt() + task.getComplexity() / node.getCapacity() + delay + comm;
                 if (ft <= f_average) {
                     i++;
                     List<Task> nodeTasks = node.getTasks();
@@ -58,7 +60,8 @@ public class MaxMCT {
                 double minFt = Double.MAX_VALUE;
                 Node selectedNode = null;
                 for (Node node : nodes) {
-                    double ft = node.getFt() + task.getComplexity() / node.getCapacity() + delay;
+                    double comm = TaskUtil.getCommnicationTime(task, node);
+                    double ft = node.getFt() + task.getComplexity() / node.getCapacity() + delay + comm;
                     if (ft < minFt) {
                         minFt = ft;
                         selectedNode = node;

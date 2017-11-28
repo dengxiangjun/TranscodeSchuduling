@@ -1,8 +1,9 @@
-package com.dxj.scheduler;
+package com.dxj.scheduler.locality;
 
 import com.dxj.model.Job;
 import com.dxj.model.Node;
 import com.dxj.model.Task;
+import com.dxj.util.TaskUtil;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -13,7 +14,7 @@ import java.util.List;
  of independent tasks onto heterogeneous distributed computing systems
  * 最小完成时间调度算法
  */
-public class MCT {
+public class LMCT {
 
     public double schedule(Job app) {
         List<Task> tasks = app.getTasks();
@@ -30,7 +31,8 @@ public class MCT {
             Node selectedNode = null;
 
             for (Node node : nodes) {
-                double ft = node.getFt() + task.getComplexity() / node.getCapacity() + delay;
+                double comm = TaskUtil.getCommnicationTime(task, node);
+                double ft = node.getFt() + task.getComplexity() / node.getCapacity() + delay + comm;
                 if (ft < minFt) {
                     minFt = ft;
                     selectedNode = node;

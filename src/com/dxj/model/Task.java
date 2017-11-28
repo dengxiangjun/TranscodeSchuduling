@@ -8,11 +8,12 @@ import java.util.List;
 public class Task {
     private String name;//任务名称
     private int complexity;//任务复杂度
+    private double segmentSize;//分片大小(MB)
     private List<Node> location;//任务（视频分片）所在位置
     private Node executeNode;//任务执行的结点
     private double makespan;//任务的执行时间
 
-    public int getSegmentSize() {
+    public double getSegmentSize() {
         return segmentSize;
     }
 
@@ -20,7 +21,6 @@ public class Task {
         this.segmentSize = segmentSize;
     }
 
-    private int segmentSize;//分片大小(MB)
     private List<Integer> subComplexitys = new ArrayList<>();//I帧刻度值
 
     public double getMakespan() {
@@ -82,15 +82,44 @@ public class Task {
         this.location = location;
     }
 
+    public Task(String name, int complexity, double segmentSize, List<Node> location) {
+        this.name = name;
+        this.complexity = complexity;
+        this.segmentSize = segmentSize;
+        this.location = location;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Task task = (Task) o;
+
+        if (complexity != task.complexity) return false;
+        if (Double.compare(task.segmentSize, segmentSize) != 0) return false;
+        return !(name != null ? !name.equals(task.name) : task.name != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = name != null ? name.hashCode() : 0;
+        result = 31 * result + complexity;
+        temp = Double.doubleToLongBits(segmentSize);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
+
     @Override
     public String toString() {
         return "Task{" +
                 "name='" + name + '\'' +
                 ", complexity=" + complexity +
+                ", segmentSize=" + segmentSize +
                 ", location=" + location +
-                ", executeNode=" + executeNode +
-                ", makespan=" + makespan +
-                ", subComplexitys=" + subComplexitys +
                 '}';
     }
 

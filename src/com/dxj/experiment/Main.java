@@ -18,7 +18,7 @@ public class Main {
         List<Node> nodes = new ArrayList<>(), nodes1 = new ArrayList<>(), nodes2 = new ArrayList<>(), nodes3 = new ArrayList<>(), nodes4 = new ArrayList<>();
         List<Task> tasks = new ArrayList<>(), tasks1 = new ArrayList<>(), tasks2 = new ArrayList<>(), tasks3 = new ArrayList<>(),tasks4 = new ArrayList<>();
 
-        for (int i = 0; i < 25; i++) {
+        for (int i = 0; i < 10; i++) {//
             double capacity = Random.nextDouble(1.0, 3.0);
             Node node = new Node("node_" + i, capacity);
             nodes.add(node);
@@ -36,8 +36,8 @@ public class Main {
             nodes4.add(node4);
         }
 
-        for (int i = 0; i < 800; i++) {
-            int complexity = Random.nextInt(15, 3600);
+        for (int i = 0; i < 500; i++) {
+            int complexity = Random.nextInt(15, 300);
             Task task = new Task("task_" + i, complexity);
             tasks.add(task);
 

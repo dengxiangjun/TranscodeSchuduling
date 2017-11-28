@@ -1,8 +1,9 @@
-package com.dxj.scheduler;
+package com.dxj.scheduler.locality;
 
 import com.dxj.model.Job;
 import com.dxj.model.Node;
 import com.dxj.model.Task;
+import com.dxj.util.TaskUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,7 +13,7 @@ import java.util.List;
 /**
  * Parallelizing video transcoding with load balancing on cloud computing
  */
-public class MLFT {
+public class LMLFT {
 
     public double schedule(Job job) {
         List<Task> tasks = job.getTasks();
@@ -52,7 +53,8 @@ public class MLFT {
 
                         if (((subComplexty - lowbound) >= c_thr) || (((subComplexty - lowbound) < c_thr) && ((nextSubComplexty - lowbound) > c_thr))) {
                             int complexity = subComplexty - lowbound;
-                            Task availabeTask = new Task(task.getName() + "_" + availableTaskCnt++, complexity);
+                            int segmentSize = (int) task.getSegmentSize() * complexity / task.getComplexity();
+                            Task availabeTask = new Task(task.getName() + "_" + availableTaskCnt++, complexity, segmentSize, task.getLocation());
                             lowbound = subComplexty;
                             subTasks.add(availabeTask);
                         }
@@ -90,7 +92,8 @@ public class MLFT {
                 Task task = newTasks.get(i);
                 if (j < nodes.size()) {
                     Node node = nodes.get(j);
-                    double ft = node.getFt() + task.getComplexity() / node.getCapacity() + delay;
+                    double comm = TaskUtil.getCommnicationTime(task, node);
+                    double ft = node.getFt() + task.getComplexity() / node.getCapacity() + delay + comm;
                     if (ft <= f_average_k) {
                         i++;
                         List<Task> nodeTasks = node.getTasks();
@@ -102,7 +105,8 @@ public class MLFT {
                     double minFt_k = Double.MAX_VALUE;
                     Node selectedNode = null;
                     for (Node node : nodes) {
-                        double ft = node.getFt() + task.getComplexity() / node.getCapacity() + delay;
+                        double comm = TaskUtil.getCommnicationTime(task, node);
+                        double ft = node.getFt() + task.getComplexity() / node.getCapacity() + delay + comm;
                         if (ft < minFt_k) {
                             minFt_k = ft;
                             selectedNode = node;
@@ -117,10 +121,10 @@ public class MLFT {
             }
 
             double k_max_ft = Double.MIN_VALUE;
-            for (Node node:nodes){
-                k_max_ft = Math.max(k_max_ft,node.getFt());
+            for (Node node : nodes) {
+                k_max_ft = Math.max(k_max_ft, node.getFt());
             }
-            jobFt = Math.min(jobFt,k_max_ft);
+            jobFt = Math.min(jobFt, k_max_ft);
 //            double k_maxFt = Double.MIN_VALUE, k_minFt = Double.MAX_VALUE;
 //            int k_maxFt_index = 0, k_minFt_index = 0;
 //            for (int i = 0; i < m; i++) {
