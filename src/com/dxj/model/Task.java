@@ -12,6 +12,7 @@ public class Task {
     private List<Node> location;//任务（视频分片）所在位置
     private Node executeNode;//任务执行的结点
     private double makespan;//任务的执行时间
+    private List<Integer> subComplexitys = new ArrayList<>();//I帧帧内刻度值
 
     public double getSegmentSize() {
         return segmentSize;
@@ -20,8 +21,6 @@ public class Task {
     public void setSegmentSize(int segmentSize) {
         this.segmentSize = segmentSize;
     }
-
-    private List<Integer> subComplexitys = new ArrayList<>();//I帧刻度值
 
     public double getMakespan() {
         return makespan;

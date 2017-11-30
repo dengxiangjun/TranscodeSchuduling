@@ -36,7 +36,7 @@ public class Main {
             nodes4.add(node4);
         }
 
-        for (int i = 0; i < 500; i++) {
+        for (int i = 0; i < 250; i++) {
             int complexity = Random.nextInt(15, 300);
             Task task = new Task("task_" + i, complexity);
             tasks.add(task);

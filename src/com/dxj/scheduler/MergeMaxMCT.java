@@ -30,6 +30,8 @@ public class MergeMaxMCT {
         int sumComplexity = 0;
         List<Integer> toalSubComplexitys = new ArrayList<>();
         for (Task task : tasks) {
+            for (Integer itemSubComplexity : task.getSubComplexitys())
+                toalSubComplexitys.add(sumComplexity + itemSubComplexity);
             sumComplexity += task.getComplexity();
             toalSubComplexitys.add(sumComplexity);
         }

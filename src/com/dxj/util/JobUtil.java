@@ -2,8 +2,11 @@ package com.dxj.util;
 
 import com.dxj.model.Job;
 import com.dxj.model.Node;
+import com.dxj.model.Task;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -22,5 +25,13 @@ public class JobUtil {
             node.setTasks(new ArrayList<>());
             node.setFt(0d);
         }
+        List<Task> tasks = job.getTasks();
+        Collections.sort(tasks, new Comparator<Task>() {
+            @Override
+            public int compare(Task o1, Task o2) {
+                int index1 = Integer.valueOf(o1.getName().substring(5)),index2 = Integer.valueOf(o2.getName().substring(5));
+                return index1 >= index2 ? 1:-1;
+            }
+        });
     }
 }

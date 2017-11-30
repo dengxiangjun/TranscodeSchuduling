@@ -4,10 +4,7 @@ import com.dxj.model.Job;
 import com.dxj.model.Node;
 import com.dxj.model.Rack;
 import com.dxj.model.Task;
-import com.dxj.scheduler.locality.LMCT;
-import com.dxj.scheduler.locality.LMLFT;
-import com.dxj.scheduler.locality.LMaxMCT;
-import com.dxj.scheduler.locality.PLTS;
+import com.dxj.scheduler.locality.*;
 import com.dxj.util.RackUtil;
 import com.dxj.util.Random;
 import com.dxj.util.JobUtil;
@@ -44,7 +41,7 @@ public class LocalityMain {
 
         RackUtil.checkNodesDistribution(racks);
 
-        for (int i = 0; i < 380; i++) {
+        for (int i = 0; i < 150; i++) {
             int complexity = Random.nextInt(20, 150);
             double segmentSize = complexity * Random.nextDouble(0.8, 1.2);
             int rackNum = Random.nextInt(0, rackCount), otherRackNum = Random.nextInt(0, rackCount);
@@ -57,6 +54,12 @@ public class LocalityMain {
             Task task = new Task("task_" + i, complexity, segmentSize, location);
             task.initSubTask(1, 20);
             tasks.add(task);
+
+            for (Node node : location) {
+                List<Task> storageTasks = node.getStorageTasks();
+                storageTasks.add(task);
+                node.setStorageTasks(storageTasks);
+            }
         }
 
         Job job = new Job(nodes, tasks);
@@ -82,5 +85,10 @@ public class LocalityMain {
         LMLFT lmlft = new LMLFT();
         double lmlftFt = lmlft.schedule(job);
         System.out.println("LMLFT算法调度结果: " + lmlftFt);
+        JobUtil.clear(job);
+
+        LMergeMaxMCT lMergeMaxMCT = new LMergeMaxMCT();
+        double lMergeMaxMCTFt = lMergeMaxMCT.schedule(job);
+        System.out.println("LMergeMaxMCT算法调度结果: " + lMergeMaxMCTFt);
     }
 }

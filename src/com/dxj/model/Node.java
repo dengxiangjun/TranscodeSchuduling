@@ -9,7 +9,7 @@ public class Node {
     private double ft;//结点上所有子任务转码完成时间
     private Rack rack;
     private List<Task> tasks = new ArrayList<>();//分配的任务集
-
+    private List<Task> storageTasks = new ArrayList<>();//保存的分片
 
     public double getFt() {
         return ft;
@@ -60,6 +60,14 @@ public class Node {
 
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
+    }
+
+    public List<Task> getStorageTasks() {
+        return storageTasks;
+    }
+
+    public void setStorageTasks(List<Task> storageTasks) {
+        this.storageTasks = storageTasks;
     }
 
     @Override

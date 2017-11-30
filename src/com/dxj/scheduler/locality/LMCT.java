@@ -10,8 +10,6 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * A comparison of eleven static heuristics for mapping a class
- of independent tasks onto heterogeneous distributed computing systems
  * 最小完成时间调度算法
  */
 public class LMCT {
