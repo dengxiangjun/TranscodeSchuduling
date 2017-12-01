@@ -40,7 +40,7 @@ public class LMaxMCT {
         for (Node node : nodes) {
             sumCapacity += node.getCapacity();
         }
-        int delay = 5, n = tasks.size(),m = nodes.size();
+        int delay = 10, n = tasks.size(),m = nodes.size();
         double f_average = sumComplexity / sumCapacity + delay * n / m;
         int j = 0;
         for (int i = 0; i < n;) {

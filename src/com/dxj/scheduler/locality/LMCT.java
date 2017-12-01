@@ -23,7 +23,7 @@ public class LMCT {
             }
         });
         List<Node> nodes = app.getNodes();
-        int delay = 5;
+        int delay = 10;
         for (Task task : tasks) {
             double minFt = Double.MAX_VALUE;
             Node selectedNode = null;

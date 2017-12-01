@@ -28,7 +28,7 @@ public class LocalityMain {
             racks.add(new Rack(i));
         }
 
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < 10; i++) {
             double capacity = Random.nextDouble(1.0, 5.0);
             Rack rack = racks.get(Random.nextInt(0, rackCount));//随机选取一个机架
 
@@ -42,7 +42,8 @@ public class LocalityMain {
         RackUtil.checkNodesDistribution(racks);
 
         for (int i = 0; i < 150; i++) {
-            int complexity = Random.nextInt(20, 150);
+
+            int complexity = Random.nextInt(30, 83);
             double segmentSize = complexity * Random.nextDouble(0.8, 1.2);
             int rackNum = Random.nextInt(0, rackCount), otherRackNum = Random.nextInt(0, rackCount);
             while (rackNum == otherRackNum) otherRackNum = (rackNum + Random.nextInt(0, rackCount)) % rackCount;
@@ -52,7 +53,7 @@ public class LocalityMain {
             List<Node> location = TaskUtil.segmentPlacement(rackNodes, otherRackNodes);
 
             Task task = new Task("task_" + i, complexity, segmentSize, location);
-            task.initSubTask(1, 20);
+            task.initSubTask(1, 10);
             tasks.add(task);
 
             for (Node node : location) {
@@ -63,12 +64,6 @@ public class LocalityMain {
         }
 
         Job job = new Job(nodes, tasks);
-
-        PLTS plts = new PLTS();
-        double pltsFt = plts.schedule(job);
-        System.out.println("PLTS算法调度结果: " + pltsFt);
-
-        JobUtil.clear(job);
 
         LMCT lmct = new LMCT();
         double lmctFt = lmct.schedule(job);
@@ -85,6 +80,12 @@ public class LocalityMain {
         LMLFT lmlft = new LMLFT();
         double lmlftFt = lmlft.schedule(job);
         System.out.println("LMLFT算法调度结果: " + lmlftFt);
+        JobUtil.clear(job);
+
+        PLTS plts = new PLTS();
+        double pltsFt = plts.schedule(job);
+        System.out.println("PLTS算法调度结果: " + pltsFt);
+
         JobUtil.clear(job);
 
         LMergeMaxMCT lMergeMaxMCT = new LMergeMaxMCT();

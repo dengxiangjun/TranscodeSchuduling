@@ -27,12 +27,14 @@ public class LMergeMaxMCT {
             }
         });
 
-        int sumComplexity = 0;
-        double sumSize = 0d;
-        for (Task task : tasks) {
-            sumComplexity += task.getComplexity();
-            sumSize += task.getSegmentSize();
-        }
+//        for ()
+//
+//        int sumComplexity = 0;
+//        double sumSize = 0d;
+//        for (Task task : tasks) {
+//            sumComplexity += task.getComplexity();
+//            sumSize += task.getSegmentSize();
+//        }
 
 
 //        List<Integer> toalSubComplexitys = new ArrayList<>();
@@ -51,11 +53,11 @@ public class LMergeMaxMCT {
 
         //Task tolalTask = new Task("integral task", sumComplexity);
         //tolalTask.setSubComplexitys(toalSubComplexitys);
-        double jobFt = Double.MAX_VALUE;
-        int m = nodes.size(), k_th_max = 40;
-        double delay = 5, f_avarage = sumComplexity / sumCapacity +
-                sumSize / (3 * TaskUtil.rackLocalSpeed) + 2 * sumSize / (3 * TaskUtil.rackCrossSpeed)
-                + delay;
+//        double jobFt = Double.MAX_VALUE;
+//        int m = nodes.size(), k_th_max = 40;
+//        double delay = 5, f_avarage = sumComplexity / sumCapacity +
+//                sumSize / (3 * TaskUtil.rackLocalSpeed) + 2 * sumSize / (3 * TaskUtil.rackCrossSpeed)
+//                + delay;
 //        for (int k_th = 1; k_th < k_th_max; k_th++) {
 //            for (Node node : nodes) {
 //                node.setFt(0d);
@@ -70,6 +72,7 @@ public class LMergeMaxMCT {
 //                List<Task> subTasks = new ArrayList<>();
 //
 //                int availableTaskCnt = 0;
+
 //                int lowbound = 0;
 //                for (int i = 0; i < subComplexitys.size(); i++) {
 //                    int subComplexty = subComplexitys.get(i);
@@ -162,6 +165,7 @@ public class LMergeMaxMCT {
 //            }
 //            jobFt = Math.min(jobFt, k_max_ft);
 //        }
-        return jobFt;
+//        return jobFt;
+        return 0;
     }
 }
