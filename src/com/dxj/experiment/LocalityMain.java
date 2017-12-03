@@ -43,7 +43,7 @@ public class LocalityMain {
 
         for (int i = 0; i < 150; i++) {
 
-            int complexity = Random.nextInt(30, 83);
+            int complexity = Random.nextInt(30, 600);
             double segmentSize = complexity * Random.nextDouble(0.8, 1.2);
             int rackNum = Random.nextInt(0, rackCount), otherRackNum = Random.nextInt(0, rackCount);
             while (rackNum == otherRackNum) otherRackNum = (rackNum + Random.nextInt(0, rackCount)) % rackCount;
@@ -53,7 +53,7 @@ public class LocalityMain {
             List<Node> location = TaskUtil.segmentPlacement(rackNodes, otherRackNodes);
 
             Task task = new Task("task_" + i, complexity, segmentSize, location);
-            task.initSubTask(1, 10);
+            task.initSubTask(1, 20);
             tasks.add(task);
 
             for (Node node : location) {

@@ -27,9 +27,10 @@ public class LMergeMaxMCT {
             }
         });
 
+
 //        for ()
 //
-//        int sumComplexity = 0;
+        int sumComplexity = 0;
 //        double sumSize = 0d;
 //        for (Task task : tasks) {
 //            sumComplexity += task.getComplexity();
@@ -37,20 +38,49 @@ public class LMergeMaxMCT {
 //        }
 
 
-//        List<Integer> toalSubComplexitys = new ArrayList<>();
-//        for (Task task : tasks) {
-//            for(Integer itemSubComplexity : task.getSubComplexitys()){
-//                toalSubComplexitys.add(sumComplexity + itemSubComplexity);
-//            }
-//            sumComplexity += task.getComplexity();
-//            toalSubComplexitys.add(sumComplexity);
-//        }
+        List<Integer> toalSubComplexitys = new ArrayList<>();
+        for (Task task : tasks) {
+            for (Integer itemSubComplexity : task.getSubComplexitys()) {
+                toalSubComplexitys.add(sumComplexity + itemSubComplexity);
+            }
+            sumComplexity += task.getComplexity();
+            toalSubComplexitys.add(sumComplexity);
+        }
 
         double sumCapacity = 0d;
         for (Node node : nodes) {
             sumCapacity += node.getCapacity();
         }
 
+        List<Task> newTasks = new ArrayList<>();
+        int m = nodes.size();
+        double delay = 5, f_avarage = sumComplexity / sumCapacity + delay;
+        int lowbound = 0, availableTaskCnt = 0, i = 0;
+        for (Node node : nodes) {
+            int taskCnt = toalSubComplexitys.size();
+            double taskComplexity = node.getCapacity() * f_avarage;
+            System.out.println("taskComplexity" + taskComplexity);
+            while (i < taskCnt) {
+                int currentComplexity = toalSubComplexitys.get(i);
+                int nextComplexity;
+                if ((i + 1) == taskCnt) nextComplexity = sumComplexity;
+                else nextComplexity = toalSubComplexitys.get(i + 1);
+                if ((currentComplexity - lowbound) >= taskComplexity ||
+                        ((currentComplexity - lowbound) < taskComplexity && (nextComplexity - lowbound) >= taskComplexity)
+                        || (i == taskCnt -1)) {
+                    int complexity = currentComplexity - lowbound;
+                    Task availabeTask = new Task("task_" + availableTaskCnt++, complexity);
+                    newTasks.add(availabeTask);
+                    lowbound = currentComplexity;
+                    i++;
+                    break;
+                }
+                i++;
+            }
+            System.out.println("lowbound" + lowbound);
+            System.out.println("--------------------------------");
+        }
+        int b = 1;
         //Task tolalTask = new Task("integral task", sumComplexity);
         //tolalTask.setSubComplexitys(toalSubComplexitys);
 //        double jobFt = Double.MAX_VALUE;

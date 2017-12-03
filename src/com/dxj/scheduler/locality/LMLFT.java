@@ -28,9 +28,10 @@ public class LMLFT {
         }
         int m = nodes.size(), k_th_max = 40;
         double delay = 10, f_average = sumComplexity / sumCapacity + delay * tasks.size() / m;
-        System.out.println("f_average" + f_average);
+       // System.out.println("f_average" + f_average);
         double jobFt = Double.MAX_VALUE;
         for (int k_th = 1; k_th < k_th_max; k_th++) {
+
             for (Node node : nodes) {
                 node.setFt(0d);
                 node.setTasks(new ArrayList<>());
@@ -83,7 +84,7 @@ public class LMLFT {
 
             int n = newTasks.size();
             double f_average_k = sumComplexity / sumCapacity + delay * n / m;
-            System.out.println("f_average_k" + f_average_k);
+            //System.out.println("f_average_k" + f_average_k);
             int j = 0;
             for (int i = 0; i < n; ) {
                 Task task = newTasks.get(i);
@@ -121,7 +122,7 @@ public class LMLFT {
             for (Node node : nodes) {
                 k_max_ft = Math.max(k_max_ft, node.getFt());
             }
-            System.out.println("k_th: "+k_th+"; k_max_ft: "+k_max_ft +";jobFt: " + jobFt);
+           // System.out.println("k_th: "+k_th+"; k_max_ft: "+k_max_ft +";jobFt: " + jobFt);
             if (k_max_ft < jobFt){
                 jobFt = k_max_ft;
             }
