@@ -63,6 +63,12 @@ public class LMLFT1 {
                             subTasks.add(availabeTask);
                         }
                     }
+                    if (lowbound < task.getComplexity()){
+                        int complexity = task.getComplexity() - lowbound;
+                        int segmentSize = (int) task.getSegmentSize() * complexity / task.getComplexity();
+                        Task availabeTask = new Task(availableTaskCnt++ + "", complexity, segmentSize, task.getLocation());
+                        subTasks.add(availabeTask);
+                    }
                     newTasks.addAll(subTasks);
                 }
             }

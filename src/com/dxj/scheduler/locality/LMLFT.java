@@ -53,13 +53,20 @@ public class LMLFT {
                         if ((i + 1) == subComplexitys.size()) nextSubComplexty = task.getComplexity();
                         else nextSubComplexty = subComplexitys.get(i + 1);
 
-                        if (((subComplexty - lowbound) >= c_thr) || (((subComplexty - lowbound) < c_thr) && ((nextSubComplexty - lowbound) > c_thr))) {
+                        if (((subComplexty - lowbound) >= c_thr) || (((subComplexty - lowbound) < c_thr) && ((nextSubComplexty - lowbound) >= c_thr))
+                                || ((i + 1) == subComplexitys.size() && (nextSubComplexty - lowbound) <= c_thr)) {
                             int complexity = subComplexty - lowbound;
                             int segmentSize = (int) task.getSegmentSize() * complexity / task.getComplexity();
                             Task availabeTask = new Task(task.getName() + "_" + availableTaskCnt++, complexity, segmentSize, task.getLocation());
                             lowbound = subComplexty;
                             subTasks.add(availabeTask);
                         }
+                    }
+                    if (lowbound < task.getComplexity()){
+                        int complexity = task.getComplexity() - lowbound;
+                        int segmentSize = (int) task.getSegmentSize() * complexity / task.getComplexity();
+                        Task availabeTask = new Task(availableTaskCnt++ + "", complexity, segmentSize, task.getLocation());
+                        subTasks.add(availabeTask);
                     }
                     newTasks.addAll(subTasks);
                 }
@@ -74,6 +81,9 @@ public class LMLFT {
                     else return 0;
                 }
             });
+            int sum = 0;
+            for (Task task : newTasks) sum+=task.getComplexity();
+            //System.out.println(sum + " --" + sumComplexity);
 
             Collections.sort(nodes, new Comparator<Node>() {
                 @Override

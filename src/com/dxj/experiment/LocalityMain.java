@@ -41,7 +41,7 @@ public class LocalityMain {
 
         RackUtil.checkNodesDistribution(racks);
 
-        for (int i = 0; i < 250; i++) {
+        for (int i = 0; i < 300; i++) {
 
             int complexity = Random.nextInt(60, 600);
             double segmentSize = complexity * Random.nextDouble(0.8, 1.2);

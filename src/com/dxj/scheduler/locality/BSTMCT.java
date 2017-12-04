@@ -54,7 +54,7 @@ public class BSTMCT {
                         if ((i + 1) == subComplexitys.size()) nextSubComplexty = task.getComplexity();
                         else nextSubComplexty = subComplexitys.get(i + 1);
 
-                        if (((subComplexty - lowbound) >= c_thr) || (((subComplexty - lowbound) < c_thr) && ((nextSubComplexty - lowbound) > c_thr))) {
+                        if (((subComplexty - lowbound) >= c_thr) || (((subComplexty - lowbound) < c_thr) && ((nextSubComplexty - lowbound) >= c_thr))) {
                             int complexity = subComplexty - lowbound;
                             int segmentSize = (int) task.getSegmentSize() * complexity / task.getComplexity();
                             Task availabeTask = new Task(availableTaskCnt++ + "", complexity, segmentSize, task.getLocation());
@@ -62,11 +62,20 @@ public class BSTMCT {
                             subTasks.add(availabeTask);
                         }
                     }
+                    if (lowbound < task.getComplexity()){
+                        int complexity = task.getComplexity() - lowbound;
+                        int segmentSize = (int) task.getSegmentSize() * complexity / task.getComplexity();
+                        Task availabeTask = new Task(availableTaskCnt++ + "", complexity, segmentSize, task.getLocation());
+                        subTasks.add(availabeTask);
+                    }
                     newTasks.addAll(subTasks);
                 }
             }
 
             double f_average = sumComplexity / sumCapacity + delay * newTasks.size() / m;
+            int sum = 0;
+            for (Task task : newTasks) sum+=task.getComplexity();
+            //System.out.println(sum + " --" + sumComplexity);
             Collections.sort(newTasks, new Comparator<Task>() {
                 @Override
                 public int compare(Task o1, Task o2) {
@@ -103,6 +112,7 @@ public class BSTMCT {
             if (k_max_ft < jobFt) {
                 jobFt = k_max_ft;
             }
+            //System.out.println(jobFt);
             jobFt = Math.min(jobFt, k_max_ft);
         }
         return jobFt;

@@ -143,5 +143,6 @@ public class Task {
                 else break;
             }
         } while (subComplexity < complexity);
+        //subComplexitys.add(complexity);
     }
 }
