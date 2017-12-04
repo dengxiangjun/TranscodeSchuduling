@@ -41,9 +41,9 @@ public class LocalityMain {
 
         RackUtil.checkNodesDistribution(racks);
 
-        for (int i = 0; i < 150; i++) {
+        for (int i = 0; i < 250; i++) {
 
-            int complexity = Random.nextInt(30, 600);
+            int complexity = Random.nextInt(60, 600);
             double segmentSize = complexity * Random.nextDouble(0.8, 1.2);
             int rackNum = Random.nextInt(0, rackCount), otherRackNum = Random.nextInt(0, rackCount);
             while (rackNum == otherRackNum) otherRackNum = (rackNum + Random.nextInt(0, rackCount)) % rackCount;
@@ -80,6 +80,16 @@ public class LocalityMain {
         LMLFT lmlft = new LMLFT();
         double lmlftFt = lmlft.schedule(job);
         System.out.println("LMLFT算法调度结果: " + lmlftFt);
+        JobUtil.clear(job);
+
+        LMLFT1 lmlft1 = new LMLFT1();
+        double lmlft1Ft = lmlft1.schedule(job);
+        System.out.println("LMLFT1算法调度结果: " + lmlft1Ft);
+        JobUtil.clear(job);
+
+        BSTMCT bstmct = new BSTMCT();
+        double bstmctFt = bstmct.schedule(job);
+        System.out.println("LMLFT2算法调度结果: " + bstmctFt);
         JobUtil.clear(job);
 
         PLTS plts = new PLTS();

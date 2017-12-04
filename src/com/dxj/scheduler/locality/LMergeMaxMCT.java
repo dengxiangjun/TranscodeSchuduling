@@ -59,7 +59,7 @@ public class LMergeMaxMCT {
         for (Node node : nodes) {
             int taskCnt = toalSubComplexitys.size();
             double taskComplexity = node.getCapacity() * f_avarage;
-            System.out.println("taskComplexity" + taskComplexity);
+            //System.out.println("taskComplexity" + taskComplexity);
             while (i < taskCnt) {
                 int currentComplexity = toalSubComplexitys.get(i);
                 int nextComplexity;
@@ -77,8 +77,8 @@ public class LMergeMaxMCT {
                 }
                 i++;
             }
-            System.out.println("lowbound" + lowbound);
-            System.out.println("--------------------------------");
+//            System.out.println("lowbound" + lowbound);
+//            System.out.println("--------------------------------");
         }
         int b = 1;
         //Task tolalTask = new Task("integral task", sumComplexity);

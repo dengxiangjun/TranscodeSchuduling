@@ -19,7 +19,7 @@ public class PLTS {
         List<Node> nodes = app.getNodes();
         int delay = 10;
         List<Integer> assignedTask = new ArrayList<>();//已经分配的列表
-        int sigma = 10;
+        int sigma = 12;
         int taskCount = tasks.size();
         while (taskCount > 0) {
             int c_max = Integer.MIN_VALUE, c_min = Integer.MAX_VALUE;
