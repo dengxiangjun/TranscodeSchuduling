@@ -24,8 +24,9 @@ public class LMCT {
         });
         List<Node> nodes = app.getNodes();
         int delay = 10;
+        double sumComm = 0;
         for (Task task : tasks) {
-            double minFt = Double.MAX_VALUE;
+            double minFt = Double.MAX_VALUE,minFtComm = 0;
             Node selectedNode = null;
 
             for (Node node : nodes) {
@@ -34,18 +35,21 @@ public class LMCT {
                 if (ft < minFt) {
                     minFt = ft;
                     selectedNode = node;
+                    minFtComm = comm;
                 }
             }
             List<Task> nodeTasks = selectedNode.getTasks();
             nodeTasks.add(task);
             selectedNode.setTasks(nodeTasks);
             selectedNode.setFt(minFt);
+            sumComm += minFtComm;
         }
 
         double appFt = Double.MIN_VALUE;
         for (Node node : nodes) {
             appFt = Math.max(appFt,node.getFt());
         }
+        app.setComm(sumComm);
         return appFt;
     }
 }

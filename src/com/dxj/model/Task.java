@@ -13,6 +13,15 @@ public class Task {
     private Node executeNode;//任务执行的结点
     private double makespan;//任务的执行时间
     private List<Integer> subComplexitys = new ArrayList<>();//I帧帧内刻度值
+    private double comm;
+
+    public double getComm() {
+        return comm;
+    }
+
+    public void setComm(double comm) {
+        this.comm = comm;
+    }
 
     public double getSegmentSize() {
         return segmentSize;

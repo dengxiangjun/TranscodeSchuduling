@@ -33,5 +33,7 @@ public class JobUtil {
                 return index1 >= index2 ? 1:-1;
             }
         });
+
+        for (Task task : tasks) task.setExecuteNode(null);
     }
 }

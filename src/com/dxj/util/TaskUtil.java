@@ -56,4 +56,25 @@ public class TaskUtil {
             else return 3 * segmentSize / rackCrossSpeed;
         }
     }
+
+    /**
+     * @param task 任务
+     * @param selectedNode 选择的节点
+     * @param makespan 任务在节点上的执行时间
+     * @param ft 节点上所有任务的完成时间
+     */
+    public static void taskAssign(Task task, Node selectedNode, double makespan,double ft){
+        List<Task> nodeTasks = selectedNode.getTasks();
+        nodeTasks.add(task);
+        selectedNode.setTasks(nodeTasks);
+        selectedNode.setFt(ft);
+        task.setExecuteNode(selectedNode);
+        task.setMakespan(makespan);
+    }
+
+    public static double getAverageCommnicationTime(double sumSize,int nodeCnt) {
+        return (sumSize / rackLocalSpeed + sumSize / rackCrossSpeed) / (1000);
+    }
+
+
 }

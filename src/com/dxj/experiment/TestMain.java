@@ -5,19 +5,15 @@ import com.dxj.model.Node;
 import com.dxj.model.Rack;
 import com.dxj.model.Task;
 import com.dxj.scheduler.locality.*;
+import com.dxj.util.JobUtil;
 import com.dxj.util.RackUtil;
 import com.dxj.util.Random;
-import com.dxj.util.JobUtil;
 import com.dxj.util.TaskUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 考虑分片的通信开销和数据本地性
- */
-public class LocalityMain {
-
+public class TestMain {
     public static void main(String[] args) {
         List<Node> nodes = new ArrayList<>();
         List<Task> tasks = new ArrayList<>();
@@ -116,24 +112,5 @@ public class LocalityMain {
         double rankMCTFt = rankMCT.schedule(job);
         System.out.println("RankMCT算法调度结果: " + rankMCTFt);
 
-        JobUtil.clear(job);
-        HJ hj = new HJ();
-        double hjFt = hj.schedule(job);
-        System.out.println("HJ算法调度结果: " + hjFt);
-
-        JobUtil.clear(job);
-        HJ1 hj1 = new HJ1();
-        double hj1Ft = hj1.schedule(job);
-        System.out.println("HJ1算法调度结果: " + hj1Ft);
-
-        JobUtil.clear(job);
-        HJ2 hj2 = new HJ2();
-        double hj2Ft = hj2.schedule(job);
-        System.out.println("HJ2算法调度结果: " + hj2Ft);
-
-        JobUtil.clear(job);
-        HJ3 hj3 = new HJ3();
-        double hj3Ft = hj3.schedule(job);
-        System.out.println("HJ3算法调度结果: " + hj3Ft);
     }
 }

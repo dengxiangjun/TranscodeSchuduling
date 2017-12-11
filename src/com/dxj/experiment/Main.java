@@ -25,7 +25,7 @@ public class Main {
             nodes.add(node);
         }
 
-        for (int i = 0; i < 250; i++) {
+        for (int i = 0; i < 50; i++) {
             int complexity = Random.nextInt(15, 300);
             Task task = new Task("task_" + i, complexity);
             task.initSubTask(1, 150);
@@ -57,5 +57,10 @@ public class Main {
         MergeMaxMCT mergeMaxMCT = new MergeMaxMCT();
         double mmmFt = mergeMaxMCT.schedule(job);
         System.out.println("归并MaxMCT算法调度结果" + mmmFt);
+        JobUtil.clear(job);
+
+        PackMCT packMCT = new PackMCT();
+        double packMCTFt = packMCT.schedule(job);
+        System.out.println("packMCT算法调度结果" + packMCTFt);
     }
 }
