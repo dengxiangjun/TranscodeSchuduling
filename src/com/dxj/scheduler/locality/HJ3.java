@@ -59,7 +59,7 @@ public class HJ3 {
             jobFt = Math.max(jobFt, node.getFt());
         }
         double ft_average = sumComplexity / sumCapacity + delay * tasks.size() / m;
-
+        System.out.println("ft_average: " + ft_average);
         Collections.sort(nodes, new Comparator<Node>() {
             @Override
             public int compare(Node o1, Node o2) {
@@ -97,20 +97,18 @@ public class HJ3 {
                     int pullComplexity = 0;
                     if (loss > profit) {//亏大于盈，把整个盈拿过来
                         List<Integer> subComplexity = executeInOtherNodeTask.getSubComplexitys();
-                        for (int j = subComplexity.size() - 1; j >= 0; j--) {
-                            int scale = subComplexity.get(i);
 
-                        }
                         for (int scale : subComplexity) {
                             if (scale <= profit) pullComplexity = scale;
                             else break;
                         }
                         if (profit > executeInOtherNodeTask.getComplexity())
                             pullComplexity = executeInOtherNodeTask.getComplexity();//整个任务都拿过来
-                        if (pullComplexity == 0) pullComplexity = executeInOtherNodeTask.getSubComplexitys().get(0);
+                        if (pullComplexity == 0) pullComplexity = subComplexity.get(0);
 
                         List<Task> assignedTasks = executeNode.getTasks();
                         assignedTasks.remove(executeInOtherNodeTask);
+                        executeNode.setTasks(assignedTasks);
                         executeNode.setFt(executeNode.getFt() - executeInOtherNodeTask.getMakespan());
                         executeInOtherNodeTask.setMakespan(0);
                         executeInOtherNodeTask.setExecuteNode(null);
@@ -118,7 +116,7 @@ public class HJ3 {
                         int remainComplexity = executeInOtherNodeTask.getComplexity() - pullComplexity;
                         if (remainComplexity > 0) {
                             Task remainTask = new Task(executeInOtherNodeTask.getName() + "_" + remainComplexity, remainComplexity);
-                            double makespan = remainComplexity / node.getCapacity() + delay;
+                            double makespan = remainComplexity / executeNode.getCapacity() + delay;
                             double ft = executeNode.getFt() + makespan;
                             TaskUtil.taskAssign(remainTask, executeNode, makespan, ft);
                         }

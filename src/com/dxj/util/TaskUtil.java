@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class TaskUtil {
     public static final double rackLocalSpeed = 128.0;//同一机架，网速128MB/s
-    public static final double rackCrossSpeed = 12.8;//不同机架,网速12.8MB/s
+    public static final double rackCrossSpeed = 128.0;//不同机架,网速12.8MB/s
 
     /**
      * 分片放置，每个分片共三个副本，第一、二个副本在同一个机架，第三个副本在另一个机架上
