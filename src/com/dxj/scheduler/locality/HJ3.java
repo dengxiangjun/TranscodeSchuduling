@@ -50,7 +50,7 @@ public class HJ3 {
                     makespan = predictMakespan;
                 }
             }
-            TaskUtil.taskAssign(task, selectedNode, makespan, ft);
+            TaskUtil.taskAssign(task, selectedNode, makespan, 0, ft);
         }
 
         double jobFt = Double.MIN_VALUE, sumFt = 0;
@@ -118,14 +118,14 @@ public class HJ3 {
                             Task remainTask = new Task(executeInOtherNodeTask.getName() + "_" + remainComplexity, remainComplexity);
                             double makespan = remainComplexity / executeNode.getCapacity() + delay;
                             double ft = executeNode.getFt() + makespan;
-                            TaskUtil.taskAssign(remainTask, executeNode, makespan, ft);
+                            TaskUtil.taskAssign(remainTask, executeNode, makespan, 0, ft);
                         }
 
                         Task pullTask = new Task(executeInOtherNodeTask.getName() + "_" + pullComplexity, pullComplexity);
 
                         double makespan = pullComplexity / node.getCapacity() + delay;
                         double pullNodeFt = node.getFt() + makespan;
-                        TaskUtil.taskAssign(pullTask, node, makespan, pullNodeFt);
+                        TaskUtil.taskAssign(pullTask, node, makespan, 0, pullNodeFt);
                     }
                 }
             }

@@ -11,8 +11,8 @@ import java.util.List;
  * Created by deng on 2017/11/28.
  */
 public class TaskUtil {
-    public static final double rackLocalSpeed = 128.0;//同一机架，网速128MB/s
-    public static final double rackCrossSpeed = 128.0;//不同机架,网速12.8MB/s
+    public static final double rackLocalSpeed = 128;//同一机架，网速128MB/s
+    public static final double rackCrossSpeed = 12.8;//不同机架,网速12.8MB/s
 
     /**
      * 分片放置，每个分片共三个副本，第一、二个副本在同一个机架，第三个副本在另一个机架上
@@ -63,13 +63,14 @@ public class TaskUtil {
      * @param makespan 任务在节点上的执行时间
      * @param ft 节点上所有任务的完成时间
      */
-    public static void taskAssign(Task task, Node selectedNode, double makespan,double ft){
+    public static void taskAssign(Task task, Node selectedNode, double makespan, double comm, double ft){
         List<Task> nodeTasks = selectedNode.getTasks();
         nodeTasks.add(task);
         selectedNode.setTasks(nodeTasks);
         selectedNode.setFt(ft);
         task.setExecuteNode(selectedNode);
         task.setMakespan(makespan);
+        task.setComm(comm);
     }
 
     public static double getAverageCommnicationTime(double sumSize,int nodeCnt) {

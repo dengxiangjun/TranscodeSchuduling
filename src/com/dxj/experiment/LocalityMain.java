@@ -28,7 +28,7 @@ public class LocalityMain {
             racks.add(new Rack(i));
         }
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 20; i++) {
             double capacity = Random.nextDouble(1.0, 5.0);
             Rack rack = racks.get(Random.nextInt(0, rackCount));//随机选取一个机架
 
@@ -41,9 +41,9 @@ public class LocalityMain {
 
         RackUtil.checkNodesDistribution(racks);
 
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 150; i++) {
 
-            int complexity = Random.nextInt(60, 600);
+            int complexity = Random.nextInt(40, 100);
             double segmentSize = complexity * Random.nextDouble(0.8, 1.2);
             int rackNum = Random.nextInt(0, rackCount), otherRackNum = Random.nextInt(0, rackCount);
             while (rackNum == otherRackNum) otherRackNum = (rackNum + Random.nextInt(0, rackCount)) % rackCount;
@@ -88,15 +88,15 @@ public class LocalityMain {
         System.out.println("LMLFT算法调度结果: " + lmlftFt);
         JobUtil.clear(job);
 
-        LMLFT3 lmlft3 = new LMLFT3();
-        double lmlft3Ft = lmlft3.schedule(job);
-        System.out.println("LMLFT3算法调度结果: " + lmlft3Ft);
-        JobUtil.clear(job);
-
-        LMLFT1 lmlft1 = new LMLFT1();
-        double lmlft1Ft = lmlft1.schedule(job);
-        System.out.println("LMLFT1算法调度结果: " + lmlft1Ft);
-        JobUtil.clear(job);
+//        LMLFT3 lmlft3 = new LMLFT3();
+//        double lmlft3Ft = lmlft3.schedule(job);
+//        System.out.println("LMLFT3算法调度结果: " + lmlft3Ft);
+//        JobUtil.clear(job);
+//
+//        LMLFT1 lmlft1 = new LMLFT1();
+//        double lmlft1Ft = lmlft1.schedule(job);
+//        System.out.println("LMLFT1算法调度结果: " + lmlft1Ft);
+//        JobUtil.clear(job);
 
         BSTMCT bstmct = new BSTMCT();
         double bstmctFt = bstmct.schedule(job);
@@ -112,28 +112,33 @@ public class LocalityMain {
 //        LMergeMaxMCT lMergeMaxMCT = new LMergeMaxMCT();
 //        double lMergeMaxMCTFt = lMergeMaxMCT.schedule(job);
 //        System.out.println("LMergeMaxMCT算法调度结果: " + lMergeMaxMCTFt);
-        RankMCT rankMCT = new RankMCT();
-        double rankMCTFt = rankMCT.schedule(job);
-        System.out.println("RankMCT算法调度结果: " + rankMCTFt);
+//        RankMCT rankMCT = new RankMCT();
+//        double rankMCTFt = rankMCT.schedule(job);
+//        System.out.println("RankMCT算法调度结果: " + rankMCTFt);
+//
+//        JobUtil.clear(job);
+//        HJ hj = new HJ();
+//        double hjFt = hj.schedule(job);
+//        System.out.println("HJ算法调度结果: " + hjFt);
+//
+//        JobUtil.clear(job);
+//        HJ1 hj1 = new HJ1();
+//        double hj1Ft = hj1.schedule(job);
+//        System.out.println("HJ1算法调度结果: " + hj1Ft);
+//
+//        JobUtil.clear(job);
+//        HJ2 hj2 = new HJ2();
+//        double hj2Ft = hj2.schedule(job);
+//        System.out.println("HJ2算法调度结果: " + hj2Ft);
+//
+//        JobUtil.clear(job);
+//        HJ3 hj3 = new HJ3();
+//        double hj3Ft = hj3.schedule(job);
+//        System.out.println("HJ3算法调度结果: " + hj3Ft);
 
         JobUtil.clear(job);
-        HJ hj = new HJ();
-        double hjFt = hj.schedule(job);
-        System.out.println("HJ算法调度结果: " + hjFt);
-
-        JobUtil.clear(job);
-        HJ1 hj1 = new HJ1();
-        double hj1Ft = hj1.schedule(job);
-        System.out.println("HJ1算法调度结果: " + hj1Ft);
-
-        JobUtil.clear(job);
-        HJ2 hj2 = new HJ2();
-        double hj2Ft = hj2.schedule(job);
-        System.out.println("HJ2算法调度结果: " + hj2Ft);
-
-        JobUtil.clear(job);
-        HJ3 hj3 = new HJ3();
-        double hj3Ft = hj3.schedule(job);
-        System.out.println("HJ3算法调度结果: " + hj3Ft);
+        HJ4 hj4 = new HJ4();
+        double hj4Ft = hj4.schedule(job);
+        System.out.println("HJ4算法调度结果: " + hj4Ft);
     }
 }

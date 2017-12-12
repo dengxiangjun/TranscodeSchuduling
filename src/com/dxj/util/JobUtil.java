@@ -34,6 +34,10 @@ public class JobUtil {
             }
         });
 
-        for (Task task : tasks) task.setExecuteNode(null);
+        for (Task task : tasks){
+            task.setExecuteNode(null);
+            task.setMakespan(0);
+            task.setComm(0);
+        }
     }
 }

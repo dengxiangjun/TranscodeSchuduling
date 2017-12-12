@@ -20,7 +20,10 @@ public class LMaxMCT {
         Collections.sort(tasks, new Comparator<Task>() {
             @Override
             public int compare(Task o1, Task o2) {
-                return o1.getComplexity() <= o2.getComplexity() ? 1 : -1;
+                int c1 = o1.getComplexity(), c2 = o2.getComplexity();
+                if (c1 < c2) return 1;
+                else if (c1 > c2) return -1;
+                else return 0;
             }
         });
         List<Node> nodes = job.getNodes();
