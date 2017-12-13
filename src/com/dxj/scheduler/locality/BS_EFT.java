@@ -6,12 +6,15 @@ import com.dxj.model.Task;
 import com.dxj.util.JobUtil;
 import com.dxj.util.TaskUtil;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Parallelizing video transcoding with load balancing on cloud computing
  */
-public class HJ4 {
+public class BS_EFT {
 
     public double schedule(Job job) {
         List<Task> tasks = job.getTasks();
@@ -24,21 +27,20 @@ public class HJ4 {
         for (Node node : nodes) {
             sumCapacity += node.getCapacity();
         }
+
+        Collections.sort(nodes, new Comparator<Node>() {
+            @Override
+            public int compare(Node o1, Node o2) {
+                return o1.getCapacity() <= o2.getCapacity() ? 1 : -1;
+            }
+        });
+
         int m = nodes.size();
         double delay = 10;
-        double time = Double.MAX_VALUE, finalFt = Double.MAX_VALUE;
-        int c1 = totalComplexity, c2 = totalComplexity - c1;
+        double finalFt = Double.MAX_VALUE;
+        int c1 = totalComplexity;
         int round = totalComplexity / 2;
         int j = 0;
-//        Collections.sort(tasks, new Comparator<Task>() {
-//            @Override
-//            public int compare(Task o1, Task o2) {
-//                int c1 = o1.getComplexity(), c2 = o2.getComplexity();
-//                if (c1 < c2) return 1;
-//                else if (c1 > c2) return -1;
-//                else return 0;
-//            }
-//        });
         while (j++ <= round && c1 > 0) {
             int localSumComplexity = 0;
             List<Task> localTasks = new ArrayList<>(), remoteTaks = new ArrayList<>();
@@ -79,8 +81,35 @@ public class HJ4 {
                 remoteTaks.add(task);
             }
 
+            Collections.sort(localTasks, new Comparator<Task>() {
+                @Override
+                public int compare(Task o1, Task o2) {
+                    int c1 = o1.getComplexity(), c2 = o2.getComplexity();
+                    if (c1 < c2) return 1;
+                    else if (c1 > c2) return -1;
+                    else return 0;
+                }
+            });
+
+            Collections.sort(remoteTaks, new Comparator<Task>() {
+                @Override
+                public int compare(Task o1, Task o2) {
+                    int c1 = o1.getComplexity(), c2 = o2.getComplexity();
+                    if (c1 < c2) return 1;
+                    else if (c1 > c2) return -1;
+                    else return 0;
+                }
+            });
+            int sum1 = 0,sum2 = 0;
             for (Task task : localTasks) {
+                sum1 += task.getComplexity();
                 List<Node> location = task.getLocation();
+//                Collections.sort(location, new Comparator<Node>() {
+//                    @Override
+//                    public int compare(Node o1, Node o2) {
+//                        return o1.getCapacity() <= o2.getCapacity() ? 1 : -1;
+//                    }
+//                });
                 Node selectedNode = null;
                 double ft = Double.MAX_VALUE;
                 double makespan = 0;
@@ -97,6 +126,7 @@ public class HJ4 {
             }
 
             for (Task task : remoteTaks) {
+                sum2 += task.getComplexity();
                 List<Node> location = task.getLocation();
                 Node selectedNode = null;
                 double ft = Double.MAX_VALUE;
@@ -115,31 +145,18 @@ public class HJ4 {
                 }
                 TaskUtil.taskAssign(task, selectedNode, makespan, comm, ft);
             }
+
             double jobFt = Double.MIN_VALUE, sumFt = 0;
             for (Node node : nodes) {
                 sumFt += node.getFt();
                 jobFt = Math.max(jobFt, node.getFt());
             }
             //System.out.println("本轮调度结果: " + jobFt+",c1: "+c1+"; c2: "+ c2);
-
             c1 -= 2;
-            c2 = totalComplexity - c1;
             JobUtil.clear(job);
             finalFt = Math.min(finalFt, jobFt);
         }
 
-
-//        JobUtil.clear(job);
-//
-
-//        jobFt = Double.MIN_VALUE;
-//        double sumComm = 0;
-//        for (Task task :tasks) sumComm +=task.getComm();
-//        for (Node node : nodes) {
-//            sumFt += node.getFt();
-//            jobFt = Math.max(jobFt, node.getFt());
-//        }
-//        System.out.println("任务只在远程执行算法调度结果: " + jobFt);
         double ft_average = totalComplexity / sumCapacity + delay * tasks.size() / m;
         System.out.println("ft_average: " + ft_average);
         return finalFt;

@@ -16,15 +16,15 @@ public class LMCT {
 
     public double schedule(Job app) {
         List<Task> tasks = app.getTasks();
-        Collections.sort(tasks, new Comparator<Task>() {
-            @Override
-            public int compare(Task o1, Task o2) {
-                int c1 = o1.getComplexity(), c2 = o2.getComplexity();
-                if (c1 < c2) return 1;
-                else if (c1 > c2) return -1;
-                else return 0;
-            }
-        });
+//        Collections.sort(tasks, new Comparator<Task>() {
+//            @Override
+//            public int compare(Task o1, Task o2) {
+//                int c1 = o1.getComplexity(), c2 = o2.getComplexity();
+//                if (c1 < c2) return 1;
+//                else if (c1 > c2) return -1;
+//                else return 0;
+//            }
+//        });
         List<Node> nodes = app.getNodes();
         int delay = 10;
         double sumComm = 0;

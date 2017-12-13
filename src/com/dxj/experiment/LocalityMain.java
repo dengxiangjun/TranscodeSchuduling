@@ -28,7 +28,7 @@ public class LocalityMain {
             racks.add(new Rack(i));
         }
 
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 10; i++) {
             double capacity = Random.nextDouble(1.0, 5.0);
             Rack rack = racks.get(Random.nextInt(0, rackCount));//随机选取一个机架
 
@@ -41,9 +41,9 @@ public class LocalityMain {
 
         RackUtil.checkNodesDistribution(racks);
 
-        for (int i = 0; i < 150; i++) {
+        for (int i = 0; i < 160; i++) {
 
-            int complexity = Random.nextInt(40, 100);
+            int complexity = Random.nextInt(40, 200);
             double segmentSize = complexity * Random.nextDouble(0.8, 1.2);
             int rackNum = Random.nextInt(0, rackCount), otherRackNum = Random.nextInt(0, rackCount);
             while (rackNum == otherRackNum) otherRackNum = (rackNum + Random.nextInt(0, rackCount)) % rackCount;
@@ -53,7 +53,7 @@ public class LocalityMain {
             List<Node> location = TaskUtil.segmentPlacement(rackNodes, otherRackNodes);
 
             Task task = new Task("task_" + i, complexity, segmentSize, location);
-            task.initSubTask(1, 20);
+            task.initSubTask(5, 20);
             tasks.add(task);
 
             for (Node node : location) {
@@ -140,5 +140,10 @@ public class LocalityMain {
         HJ4 hj4 = new HJ4();
         double hj4Ft = hj4.schedule(job);
         System.out.println("HJ4算法调度结果: " + hj4Ft);
+
+        JobUtil.clear(job);
+        BS_EFT bs_eft = new BS_EFT();
+        double bs_eftFt = bs_eft.schedule(job);
+        System.out.println("BS_EFT算法调度结果: " + bs_eftFt);
     }
 }
