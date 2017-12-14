@@ -37,7 +37,7 @@ public class BS_EFT {
 
         int m = nodes.size();
         double delay = 10;
-        double finalFt = Double.MAX_VALUE;
+        double finalFt = Double.MAX_VALUE, minSpan = Double.MAX_VALUE;
         int c1 = totalComplexity;
         int round = totalComplexity / 2;
         int j = 0;
@@ -53,26 +53,30 @@ public class BS_EFT {
                 } else {
                     int preComplexity = localSumComplexity - task.getComplexity();
                     int overflow = c1 - preComplexity;
+
                     List<Integer> subComplexity = task.getSubComplexitys();
                     int lastLocalComplexity = 0, firstRemoteComplexity = 0, k = 0;
                     for (; k < subComplexity.size(); k++) {
                         int scale = subComplexity.get(k);
                         if (overflow >= scale) lastLocalComplexity = scale;
-                        else {
-                            firstRemoteComplexity = task.getComplexity() - lastLocalComplexity;
-                            break;
-                        }
+                        else break;
+                    }
+                    firstRemoteComplexity = task.getComplexity() - lastLocalComplexity;
+                    if (lastLocalComplexity > 0 ) {
+                        Task lastLocalTask = new Task(task.getName() + "_1", lastLocalComplexity,
+                                task.getSegmentSize() * lastLocalComplexity / task.getComplexity(), task.getLocation());
+                        lastLocalTask.setSubComplexitys(subComplexity.subList(0, k));
+                        localTasks.add(lastLocalTask);
                     }
 
-                    Task lastLocalTask = new Task(task.getName() + "_1",lastLocalComplexity,
-                            task.getSegmentSize() * lastLocalComplexity/task.getComplexity(),task.getLocation());
-                    lastLocalTask.setSubComplexitys(subComplexity.subList(0,k));
-                    localTasks.add(lastLocalTask);
-
-                    Task firstRemoteTask = new Task(task.getName() + "_2",firstRemoteComplexity,
-                            task.getSegmentSize() * firstRemoteComplexity/task.getComplexity(),task.getLocation());
-                    firstRemoteTask.setSubComplexitys(subComplexity.subList(k,subComplexity.size()));
-                    remoteTaks.add(firstRemoteTask);
+                    if (firstRemoteComplexity >0) {
+                        Task firstRemoteTask = new Task(task.getName() + "_2", firstRemoteComplexity,
+                                task.getSegmentSize() * firstRemoteComplexity / task.getComplexity(), task.getLocation());
+                        firstRemoteTask.setSubComplexitys(subComplexity.subList(k, subComplexity.size()));
+                        remoteTaks.add(firstRemoteTask);
+                    }
+                    i++;
+                    break;
                 }
             }
 
@@ -101,6 +105,7 @@ public class BS_EFT {
                 }
             });
             int sum1 = 0,sum2 = 0;
+            double lolcalSpan = 0,remoteSpan = 0;
             for (Task task : localTasks) {
                 sum1 += task.getComplexity();
                 List<Node> location = task.getLocation();
@@ -122,6 +127,7 @@ public class BS_EFT {
                         makespan = predictMakespan;
                     }
                 }
+                lolcalSpan += makespan;
                 TaskUtil.taskAssign(task, selectedNode, makespan, 0, ft);
             }
 
@@ -143,6 +149,7 @@ public class BS_EFT {
                         makespan = predictMakespan;
                     }
                 }
+                remoteSpan += makespan;
                 TaskUtil.taskAssign(task, selectedNode, makespan, comm, ft);
             }
 
@@ -151,14 +158,15 @@ public class BS_EFT {
                 sumFt += node.getFt();
                 jobFt = Math.max(jobFt, node.getFt());
             }
-            //System.out.println("本轮调度结果: " + jobFt+",c1: "+c1+"; c2: "+ c2);
-            c1 -= 2;
+           // System.out.println("本轮调度结果: " + jobFt+",c1: "+c1 +"; sumFt: "+ sumFt + "  ;lolcalSpan: "+lolcalSpan + " ;remoteSpan: " + remoteSpan + " ;sumComplexity: " + (sum1 + sum2));
+            c1 -= 5;
             JobUtil.clear(job);
             finalFt = Math.min(finalFt, jobFt);
+            minSpan = Math.min(lolcalSpan+ remoteSpan,minSpan);
         }
 
         double ft_average = totalComplexity / sumCapacity + delay * tasks.size() / m;
-        System.out.println("ft_average: " + ft_average);
+        System.out.println("ft_average: " + ft_average + "; minSpan: "+ minSpan);
         return finalFt;
     }
 }

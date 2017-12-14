@@ -41,7 +41,7 @@ public class LocalityMain {
 
         RackUtil.checkNodesDistribution(racks);
 
-        for (int i = 0; i < 160; i++) {
+        for (int i = 0; i < 90; i++) {
 
             int complexity = Random.nextInt(40, 200);
             double segmentSize = complexity * Random.nextDouble(0.8, 1.2);
@@ -77,11 +77,11 @@ public class LocalityMain {
 
         JobUtil.clear(job);
 
-        NewMaxMCT newMaxMCT = new NewMaxMCT();
-        double newMaxMCTFt = newMaxMCT.schedule(job);
-        System.out.println("NewMaxMCT算法调度结果: " + newMaxMCTFt);
-
-        JobUtil.clear(job);
+//        NewMaxMCT newMaxMCT = new NewMaxMCT();
+//        double newMaxMCTFt = newMaxMCT.schedule(job);
+//        System.out.println("NewMaxMCT算法调度结果: " + newMaxMCTFt);
+//
+//        JobUtil.clear(job);
 
         LMLFT lmlft = new LMLFT();
         double lmlftFt = lmlft.schedule(job);
@@ -97,11 +97,11 @@ public class LocalityMain {
 //        double lmlft1Ft = lmlft1.schedule(job);
 //        System.out.println("LMLFT1算法调度结果: " + lmlft1Ft);
 //        JobUtil.clear(job);
-
-        BSTMCT bstmct = new BSTMCT();
-        double bstmctFt = bstmct.schedule(job);
-        System.out.println("BSTMCT算法调度结果: " + bstmctFt);
-        JobUtil.clear(job);
+//
+//        BSTMCT bstmct = new BSTMCT();
+//        double bstmctFt = bstmct.schedule(job);
+//        System.out.println("BSTMCT算法调度结果: " + bstmctFt);
+//        JobUtil.clear(job);
 
         PLTS plts = new PLTS();
         double pltsFt = plts.schedule(job);
@@ -135,11 +135,11 @@ public class LocalityMain {
 //        HJ3 hj3 = new HJ3();
 //        double hj3Ft = hj3.schedule(job);
 //        System.out.println("HJ3算法调度结果: " + hj3Ft);
-
-        JobUtil.clear(job);
-        HJ4 hj4 = new HJ4();
-        double hj4Ft = hj4.schedule(job);
-        System.out.println("HJ4算法调度结果: " + hj4Ft);
+//
+//        JobUtil.clear(job);
+//        HJ4 hj4 = new HJ4();
+//        double hj4Ft = hj4.schedule(job);
+//        System.out.println("HJ4算法调度结果: " + hj4Ft);
 
         JobUtil.clear(job);
         BS_EFT bs_eft = new BS_EFT();
