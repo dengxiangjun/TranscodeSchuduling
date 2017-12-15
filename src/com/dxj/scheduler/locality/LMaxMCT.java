@@ -44,36 +44,44 @@ public class LMaxMCT {
             sumCapacity += node.getCapacity();
         }
         int delay = 10, n = tasks.size(),m = nodes.size();
-        double f_average = sumComplexity / sumCapacity + delay * n / m;
+        double f_average = sumComplexity / sumCapacity + delay * n / m,sumMakespan = 0;
         int j = 0;
         for (int i = 0; i < n;) {
             Task task = tasks.get(i);
             if (j < m) {
                 Node node = nodes.get(j);
                 double comm = TaskUtil.getCommnicationTime(task, node);
-                double ft = node.getFt() + task.getComplexity() / node.getCapacity() + delay + comm;
+                double predictMakespan = task.getComplexity() / node.getCapacity() + delay + comm;
+                double ft = node.getFt() + predictMakespan;
                 if (ft <= f_average) {
                     i++;
-                    List<Task> nodeTasks = node.getTasks();
-                    nodeTasks.add(task);
-                    node.setTasks(nodeTasks);
-                    node.setFt(ft);
+                    TaskUtil.taskAssign(task, node, predictMakespan, comm, ft);
+                    sumMakespan +=predictMakespan;
+//                    List<Task> nodeTasks = node.getTasks();
+//                    nodeTasks.add(task);
+//                    node.setTasks(nodeTasks);
+//                    node.setFt(ft);
                 } else j++;
             } else {
-                double minFt = Double.MAX_VALUE;
+                double minFt = Double.MAX_VALUE,makespan = 0,minFtComm = 0;
                 Node selectedNode = null;
                 for (Node node : nodes) {
                     double comm = TaskUtil.getCommnicationTime(task, node);
-                    double ft = node.getFt() + task.getComplexity() / node.getCapacity() + delay + comm;
+                    double predictMakespan = task.getComplexity() / node.getCapacity() + delay + comm;
+                    double ft = node.getFt() + predictMakespan;
                     if (ft < minFt) {
                         minFt = ft;
                         selectedNode = node;
+                        makespan = predictMakespan;
+                        minFtComm = comm;
                     }
                 }
-                List<Task> nodeTasks = selectedNode.getTasks();
-                nodeTasks.add(task);
-                selectedNode.setTasks(nodeTasks);
-                selectedNode.setFt(minFt);
+                TaskUtil.taskAssign(task, selectedNode, makespan, minFtComm, minFt);
+                sumMakespan +=makespan;
+//                List<Task> nodeTasks = selectedNode.getTasks();
+//                nodeTasks.add(task);
+//                selectedNode.setTasks(nodeTasks);
+//                selectedNode.setFt(minFt);
                 i++;
             }
         }
@@ -82,6 +90,7 @@ public class LMaxMCT {
         for (Node node : nodes) {
             jobFt = Math.max(jobFt, node.getFt());
         }
+        job.setMakespan(sumMakespan);
         return jobFt;
     }
 }

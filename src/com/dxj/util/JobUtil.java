@@ -20,6 +20,7 @@ public class JobUtil {
      * @param job 作业
      */
     public static void clear(Job job) {
+        job.setMakespan(0);
         List<Node> nodes = job.getNodes();
         for (Node node : nodes) {
             node.setTasks(new ArrayList<>());

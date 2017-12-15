@@ -7,6 +7,15 @@ public class Job {
     private List<Task> tasks;//作业的任务集
     private List<Rack> racks;
     private double comm;//通信开销
+    private double makespan;
+
+    public double getMakespan() {
+        return makespan;
+    }
+
+    public void setMakespan(double makespan) {
+        this.makespan = makespan;
+    }
 
     public double getComm() {
         return comm;

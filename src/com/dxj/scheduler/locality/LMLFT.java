@@ -29,7 +29,7 @@ public class LMLFT {
         int m = nodes.size(), k_th_max = 40;
         double delay = 10, f_average = sumComplexity / sumCapacity + delay * tasks.size() / m;
        // System.out.println("f_average" + f_average);
-        double jobFt = Double.MAX_VALUE;
+        double jobFt = Double.MAX_VALUE,minSpan = Double.MAX_VALUE;
         for (int k_th = 1; k_th < k_th_max; k_th++) {
 
             for (Node node : nodes) {
@@ -93,7 +93,7 @@ public class LMLFT {
             });
 
             int n = newTasks.size();
-            double f_average_k = sumComplexity / sumCapacity + delay * n / m;
+            double f_average_k = sumComplexity / sumCapacity + delay * n / m,sumMakespan = 0;
             //System.out.println("f_average_k" + f_average_k);
             int j = 0;
             for (int i = 0; i < n; ) {
@@ -101,29 +101,34 @@ public class LMLFT {
                 if (j < nodes.size()) {
                     Node node = nodes.get(j);
                     double comm = TaskUtil.getCommnicationTime(task, node);
-                    double ft = node.getFt() + task.getComplexity() / node.getCapacity() + delay + comm;
+                    double predictMakespan = task.getComplexity() / node.getCapacity() + delay + comm;
+                    double ft = node.getFt() + predictMakespan;
                     if (ft <= f_average_k) {
                         i++;
                         List<Task> nodeTasks = node.getTasks();
                         nodeTasks.add(task);
                         node.setTasks(nodeTasks);
                         node.setFt(ft);
+                        sumMakespan +=predictMakespan;
                     } else j++;
                 } else {
-                    double minFt_k = Double.MAX_VALUE;
+                    double minFt_k = Double.MAX_VALUE, makespan = 0;
                     Node selectedNode = null;
                     for (Node node : nodes) {
                         double comm = TaskUtil.getCommnicationTime(task, node);
-                        double ft = node.getFt() + task.getComplexity() / node.getCapacity() + delay + comm;
+                        double predictMakespan = task.getComplexity() / node.getCapacity() + delay + comm;
+                        double ft = node.getFt() + predictMakespan;
                         if (ft < minFt_k) {
                             minFt_k = ft;
                             selectedNode = node;
+                            makespan = predictMakespan;
                         }
                     }
                     List<Task> nodeTasks = selectedNode.getTasks();
                     nodeTasks.add(task);
                     selectedNode.setTasks(nodeTasks);
                     selectedNode.setFt(minFt_k);
+                    sumMakespan += makespan;
                     i++;
                 }
             }
@@ -137,7 +142,9 @@ public class LMLFT {
                 jobFt = k_max_ft;
             }
             jobFt = Math.min(jobFt, k_max_ft);
+            minSpan = Math.min(minSpan,sumMakespan);
         }
+        job.setMakespan(minSpan);
         return jobFt;
     }
 }

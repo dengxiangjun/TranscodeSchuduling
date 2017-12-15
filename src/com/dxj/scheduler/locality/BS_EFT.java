@@ -167,6 +167,7 @@ public class BS_EFT {
 
         double ft_average = totalComplexity / sumCapacity + delay * tasks.size() / m;
         System.out.println("ft_average: " + ft_average + "; minSpan: "+ minSpan);
+        job.setMakespan(minSpan);
         return finalFt;
     }
 }

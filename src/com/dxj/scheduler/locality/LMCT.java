@@ -27,25 +27,29 @@ public class LMCT {
 //        });
         List<Node> nodes = app.getNodes();
         int delay = 10;
-        double sumComm = 0;
+        double sumComm = 0,sumMakespan = 0;
         for (Task task : tasks) {
-            double minFt = Double.MAX_VALUE,minFtComm = 0;
+            double minFt = Double.MAX_VALUE,minFtComm = 0,makespan = 0;
             Node selectedNode = null;
 
             for (Node node : nodes) {
                 double comm = TaskUtil.getCommnicationTime(task, node);
-                double ft = node.getFt() + task.getComplexity() / node.getCapacity() + delay + comm;
+                double predictMakespan = task.getComplexity() / node.getCapacity() + delay + comm;
+                double ft = node.getFt() + predictMakespan;
                 if (ft < minFt) {
                     minFt = ft;
                     selectedNode = node;
                     minFtComm = comm;
+                    makespan = predictMakespan;
                 }
             }
-            List<Task> nodeTasks = selectedNode.getTasks();
-            nodeTasks.add(task);
-            selectedNode.setTasks(nodeTasks);
-            selectedNode.setFt(minFt);
-            sumComm += minFtComm;
+            TaskUtil.taskAssign(task, selectedNode, makespan, minFtComm, minFt);
+            sumMakespan += makespan;
+//            List<Task> nodeTasks = selectedNode.getTasks();
+//            nodeTasks.add(task);
+//            selectedNode.setTasks(nodeTasks);
+//            selectedNode.setFt(minFt);
+//            sumComm += minFtComm;
         }
 
         double appFt = Double.MIN_VALUE;
@@ -53,6 +57,7 @@ public class LMCT {
             appFt = Math.max(appFt,node.getFt());
         }
         app.setComm(sumComm);
+        app.setMakespan(sumMakespan);
         return appFt;
     }
 }

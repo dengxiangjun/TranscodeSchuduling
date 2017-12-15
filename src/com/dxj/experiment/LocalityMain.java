@@ -41,7 +41,7 @@ public class LocalityMain {
 
         RackUtil.checkNodesDistribution(racks);
 
-        for (int i = 0; i < 90; i++) {
+        for (int i = 0; i < 80; i++) {
 
             int complexity = Random.nextInt(40, 200);
             double segmentSize = complexity * Random.nextDouble(0.8, 1.2);
@@ -67,13 +67,13 @@ public class LocalityMain {
 
         LMCT lmct = new LMCT();
         double lmctFt = lmct.schedule(job);
-        System.out.println("LMCT算法调度结果: " + lmctFt);
+        System.out.println("LMCT算法调度结果: " + lmctFt + " ;makespan "+ job.getMakespan());
 
         JobUtil.clear(job);
 
         LMaxMCT lMaxMCT = new LMaxMCT();
         double localityMaxMCTFt = lMaxMCT.schedule(job);
-        System.out.println("LocalityMaxMCT算法调度结果: " + localityMaxMCTFt);
+        System.out.println("LocalityMaxMCT算法调度结果: " + localityMaxMCTFt + " ;makespan "+ job.getMakespan());
 
         JobUtil.clear(job);
 
@@ -85,7 +85,7 @@ public class LocalityMain {
 
         LMLFT lmlft = new LMLFT();
         double lmlftFt = lmlft.schedule(job);
-        System.out.println("LMLFT算法调度结果: " + lmlftFt);
+        System.out.println("LMLFT算法调度结果: " + lmlftFt + " ;makespan "+ job.getMakespan());
         JobUtil.clear(job);
 
 //        LMLFT3 lmlft3 = new LMLFT3();
@@ -97,7 +97,7 @@ public class LocalityMain {
 //        double lmlft1Ft = lmlft1.schedule(job);
 //        System.out.println("LMLFT1算法调度结果: " + lmlft1Ft);
 //        JobUtil.clear(job);
-//
+
 //        BSTMCT bstmct = new BSTMCT();
 //        double bstmctFt = bstmct.schedule(job);
 //        System.out.println("BSTMCT算法调度结果: " + bstmctFt);
@@ -105,7 +105,7 @@ public class LocalityMain {
 
         PLTS plts = new PLTS();
         double pltsFt = plts.schedule(job);
-        System.out.println("PLTS算法调度结果: " + pltsFt);
+        System.out.println("PLTS算法调度结果: " + pltsFt + " ;makespan "+ job.getMakespan());
 
         JobUtil.clear(job);
 
@@ -144,6 +144,6 @@ public class LocalityMain {
         JobUtil.clear(job);
         BS_EFT bs_eft = new BS_EFT();
         double bs_eftFt = bs_eft.schedule(job);
-        System.out.println("BS_EFT算法调度结果: " + bs_eftFt);
+        System.out.println("BS_EFT算法调度结果: " + bs_eftFt + " ;makespan "+ job.getMakespan());
     }
 }
