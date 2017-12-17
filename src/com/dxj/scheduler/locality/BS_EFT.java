@@ -38,7 +38,7 @@ public class BS_EFT {
         int m = nodes.size();
         double delay = 10;
         double finalFt = Double.MAX_VALUE, minSpan = Double.MAX_VALUE;
-        int c1 = totalComplexity;
+        int c1 = totalComplexity,bestC = 0;
         int round = totalComplexity / 2;
         int j = 0;
         while (j++ <= round && c1 > 0) {
@@ -62,14 +62,14 @@ public class BS_EFT {
                         else break;
                     }
                     firstRemoteComplexity = task.getComplexity() - lastLocalComplexity;
-                    if (lastLocalComplexity > 0 ) {
+                    if (lastLocalComplexity > 0) {
                         Task lastLocalTask = new Task(task.getName() + "_1", lastLocalComplexity,
                                 task.getSegmentSize() * lastLocalComplexity / task.getComplexity(), task.getLocation());
                         lastLocalTask.setSubComplexitys(subComplexity.subList(0, k));
                         localTasks.add(lastLocalTask);
                     }
 
-                    if (firstRemoteComplexity >0) {
+                    if (firstRemoteComplexity > 0) {
                         Task firstRemoteTask = new Task(task.getName() + "_2", firstRemoteComplexity,
                                 task.getSegmentSize() * firstRemoteComplexity / task.getComplexity(), task.getLocation());
                         firstRemoteTask.setSubComplexitys(subComplexity.subList(k, subComplexity.size()));
@@ -104,9 +104,9 @@ public class BS_EFT {
                     else return 0;
                 }
             });
-            int sum1 = 0,sum2 = 0;
-            double lolcalSpan = 0,remoteSpan = 0;
-            for (Task task : localTasks) {
+            int sum1 = 0, sum2 = 0;
+            double lolcalSpan = 0, remoteSpan = 0;
+            for (Task task : localTasks) {//先分配本地任务，再分配远程任务
                 sum1 += task.getComplexity();
                 List<Node> location = task.getLocation();
 //                Collections.sort(location, new Comparator<Node>() {
@@ -158,16 +158,142 @@ public class BS_EFT {
                 sumFt += node.getFt();
                 jobFt = Math.max(jobFt, node.getFt());
             }
-           // System.out.println("本轮调度结果: " + jobFt+",c1: "+c1 +"; sumFt: "+ sumFt + "  ;lolcalSpan: "+lolcalSpan + " ;remoteSpan: " + remoteSpan + " ;sumComplexity: " + (sum1 + sum2));
-            c1 -= 5;
-            JobUtil.clear(job);
+            // double roundSpan =
+            //System.out.println("本轮调度结果: " + jobFt+",c1: "+c1 +"; sumFt: "+ sumFt + "  ;lolcalSpan: "+lolcalSpan + " ;remoteSpan: " + remoteSpan + " ;sumComplexity: " + (sum1 + sum2));
+
             finalFt = Math.min(finalFt, jobFt);
-            minSpan = Math.min(lolcalSpan+ remoteSpan,minSpan);
+            if (sumFt < minSpan){
+                bestC = c1;
+                minSpan = sumFt;
+            }
+
+            JobUtil.clear(job);
+            c1 -= 1;
         }
 
         double ft_average = totalComplexity / sumCapacity + delay * tasks.size() / m;
-        System.out.println("ft_average: " + ft_average + "; minSpan: "+ minSpan);
+        System.out.println("ft_average: " + ft_average + "; minSpan: " + minSpan);
         job.setMakespan(minSpan);
+
+
+
+        int localSumComplexity = 0;
+        List<Task> localTasks = new ArrayList<>(), remoteTaks = new ArrayList<>();
+        int i = 0;
+        for (; i < tasks.size(); i++) {
+            Task task = tasks.get(i);
+            localSumComplexity += task.getComplexity();
+            if (localSumComplexity <= bestC) {
+                localTasks.add(task);
+            } else {
+                int preComplexity = localSumComplexity - task.getComplexity();
+                int overflow = bestC - preComplexity;
+
+                List<Integer> subComplexity = task.getSubComplexitys();
+                int lastLocalComplexity = 0, firstRemoteComplexity = 0, k = 0;
+                for (; k < subComplexity.size(); k++) {
+                    int scale = subComplexity.get(k);
+                    if (overflow >= scale) lastLocalComplexity = scale;
+                    else break;
+                }
+                firstRemoteComplexity = task.getComplexity() - lastLocalComplexity;
+                if (lastLocalComplexity > 0) {
+                    Task lastLocalTask = new Task(task.getName() + "_1", lastLocalComplexity,
+                            task.getSegmentSize() * lastLocalComplexity / task.getComplexity(), task.getLocation());
+                    lastLocalTask.setSubComplexitys(subComplexity.subList(0, k));
+                    localTasks.add(lastLocalTask);
+                }
+
+                if (firstRemoteComplexity > 0) {
+                    Task firstRemoteTask = new Task(task.getName() + "_2", firstRemoteComplexity,
+                            task.getSegmentSize() * firstRemoteComplexity / task.getComplexity(), task.getLocation());
+                    firstRemoteTask.setSubComplexitys(subComplexity.subList(k, subComplexity.size()));
+                    remoteTaks.add(firstRemoteTask);
+                }
+                i++;
+                break;
+            }
+        }
+
+        for (; i < tasks.size(); i++) {
+            Task task = tasks.get(i);
+            remoteTaks.add(task);
+        }
+
+        Collections.sort(localTasks, new Comparator<Task>() {
+            @Override
+            public int compare(Task o1, Task o2) {
+                int c1 = o1.getComplexity(), c2 = o2.getComplexity();
+                if (c1 < c2) return 1;
+                else if (c1 > c2) return -1;
+                else return 0;
+            }
+        });
+
+        Collections.sort(remoteTaks, new Comparator<Task>() {
+            @Override
+            public int compare(Task o1, Task o2) {
+                int c1 = o1.getComplexity(), c2 = o2.getComplexity();
+                if (c1 < c2) return 1;
+                else if (c1 > c2) return -1;
+                else return 0;
+            }
+        });
+        int sum1 = 0, sum2 = 0;
+        double lolcalSpan = 0, remoteSpan = 0;
+        for (Task task : localTasks) {
+            sum1 += task.getComplexity();
+            List<Node> location = task.getLocation();
+//                Collections.sort(location, new Comparator<Node>() {
+//                    @Override
+//                    public int compare(Node o1, Node o2) {
+//                        return o1.getCapacity() <= o2.getCapacity() ? 1 : -1;
+//                    }
+//                });
+            Node selectedNode = null;
+            double ft = Double.MAX_VALUE;
+            double makespan = 0;
+            for (Node node : location) {
+                double predictMakespan = task.getComplexity() / node.getCapacity() + delay;
+                double nodeFt = node.getFt() + predictMakespan;//任务只在本地执行，选取最早执行完的
+                if (nodeFt < ft) {
+                    selectedNode = node;
+                    ft = nodeFt;
+                    makespan = predictMakespan;
+                }
+            }
+            lolcalSpan += makespan;
+            TaskUtil.taskAssign(task, selectedNode, makespan, 0, ft);
+        }
+
+        for (Task task : remoteTaks) {
+            sum2 += task.getComplexity();
+            List<Node> location = task.getLocation();
+            Node selectedNode = null;
+            double ft = Double.MAX_VALUE;
+            double makespan = 0, comm = 0;
+            for (Node node : nodes) {
+                if (location.contains(node)) continue;
+                double predictComm = TaskUtil.getCommnicationTime(task, node);
+                double predictMakespan = task.getComplexity() / node.getCapacity() + delay + comm;
+                double nodeFt = node.getFt() + predictMakespan;//任务只在远程执行，选取最早执行完的
+                if (nodeFt < ft) {
+                    selectedNode = node;
+                    ft = nodeFt;
+                    comm = predictComm;
+                    makespan = predictMakespan;
+                }
+            }
+            remoteSpan += makespan;
+            TaskUtil.taskAssign(task, selectedNode, makespan, comm, ft);
+        }
+
+        double jobFt = Double.MIN_VALUE, sumFt = 0;
+        for (Node node : nodes) {
+            sumFt += node.getFt();
+            jobFt = Math.max(jobFt, node.getFt());
+        }
+
         return finalFt;
     }
 }

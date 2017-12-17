@@ -21,6 +21,7 @@ public class JobUtil {
      */
     public static void clear(Job job) {
         job.setMakespan(0);
+        job.setComm(0);
         List<Node> nodes = job.getNodes();
         for (Node node : nodes) {
             node.setTasks(new ArrayList<>());

@@ -20,7 +20,7 @@ public class PLTS {
         int delay = 10;
         List<Integer> assignedTask = new ArrayList<>();//已经分配的列表
         int sigma = 12;
-        int taskCount = tasks.size(),sumSpan = 0;
+        int taskCount = tasks.size();
         while (taskCount > 0) {
             int c_max = Integer.MIN_VALUE, c_min = Integer.MAX_VALUE;
             Map<Task, Double> taskMinFt = new HashMap<>();
@@ -47,6 +47,7 @@ public class PLTS {
                 taskMinFt.put(task, minFtI);
                 taskNodeMap.put(task, minFtINode);
             }
+
             if (curr > sigma) {
                 Task maxFtTask = null;
                 Node maxFtNode = null;
@@ -61,7 +62,6 @@ public class PLTS {
                 List<Task> nodeTasks = maxFtNode.getTasks();
                 nodeTasks.add(maxFtTask);
                 maxFtNode.setTasks(nodeTasks);
-                sumSpan += (maxFtI - maxFtNode.getFt());
                 maxFtNode.setFt(maxFtI);
 
                 int maxtaskNum = Integer.valueOf(maxFtTask.getName().substring(5));
@@ -80,7 +80,6 @@ public class PLTS {
                 List<Task> nodeTasks = minFtNode.getTasks();
                 nodeTasks.add(minFtTask);
                 minFtNode.setTasks(nodeTasks);
-                sumSpan += (minFtI - minFtNode.getFt());
                 minFtNode.setFt(minFtI);
 
                 int mintaskNum = Integer.valueOf(minFtTask.getName().substring(5));
@@ -89,11 +88,13 @@ public class PLTS {
             taskCount--;
         }
 
-        double appFt = Double.MIN_VALUE;
+        double appFt = Double.MIN_VALUE,sumFt= 0;
         for (Node node : nodes) {
             appFt = Math.max(appFt, node.getFt());
+            sumFt += node.getFt();
         }
-        app.setMakespan(sumSpan);
+
+        app.setMakespan(sumFt);
         return appFt;
     }
 }

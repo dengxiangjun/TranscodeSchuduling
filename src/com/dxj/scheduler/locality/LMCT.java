@@ -41,6 +41,7 @@ public class LMCT {
                     selectedNode = node;
                     minFtComm = comm;
                     makespan = predictMakespan;
+                    sumComm +=minFtComm;
                 }
             }
             TaskUtil.taskAssign(task, selectedNode, makespan, minFtComm, minFt);
