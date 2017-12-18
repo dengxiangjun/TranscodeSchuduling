@@ -41,9 +41,9 @@ public class LocalityMain {
 
         RackUtil.checkNodesDistribution(racks);
 
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < 60; i++) {
 
-            int complexity = Random.nextInt(40, 50);
+            int complexity = Random.nextInt(40, 80);
             double segmentSize = complexity * Random.nextDouble(0.8, 1.2);
             int rackNum = Random.nextInt(0, rackCount), otherRackNum = Random.nextInt(0, rackCount);
             while (rackNum == otherRackNum) otherRackNum = (rackNum + Random.nextInt(0, rackCount)) % rackCount;

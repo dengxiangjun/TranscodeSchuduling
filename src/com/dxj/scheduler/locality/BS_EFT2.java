@@ -168,11 +168,16 @@ public class BS_EFT2 {
             // double roundSpan =
             //System.out.println("本轮调度结果: " + jobFt+",c1: "+c1 +"; sumFt: "+ sumFt + "  ;lolcalSpan: "+lolcalSpan + " ;remoteSpan: " + remoteSpan);
 
-            finalFt = Math.min(finalFt, jobFt);
-            if (sumFt < minSpan){
-                bestC = c1;
+            if (jobFt < finalFt){
+                finalFt = jobFt;
                 minSpan = sumFt;
             }
+//            finalFt = Math.min(finalFt, jobFt);
+//            if (sumFt < minSpan){
+//                bestC = c1;
+//                minSpan = sumFt;
+//                //finalFt = jobFt;
+//            }
 
 
 
