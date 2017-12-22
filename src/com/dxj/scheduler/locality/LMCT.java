@@ -3,6 +3,7 @@ package com.dxj.scheduler.locality;
 import com.dxj.model.Job;
 import com.dxj.model.Node;
 import com.dxj.model.Task;
+import com.dxj.scheduler.Scheduler;
 import com.dxj.util.TaskUtil;
 
 import java.util.Collections;
@@ -12,7 +13,7 @@ import java.util.List;
 /**
  * 最小完成时间调度算法
  */
-public class LMCT {
+public class LMCT  implements Scheduler {
 
     public double schedule(Job app) {
         List<Task> tasks = app.getTasks();
@@ -26,7 +27,7 @@ public class LMCT {
 //            }
 //        });
         List<Node> nodes = app.getNodes();
-        int delay = 10;
+        int delay = 5;
         double sumComm = 0,sumMakespan = 0;
         for (Task task : tasks) {
             double minFt = Double.MAX_VALUE,minFtComm = 0,makespan = 0;

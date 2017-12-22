@@ -3,6 +3,7 @@ package com.dxj.scheduler.locality;
 import com.dxj.model.Job;
 import com.dxj.model.Node;
 import com.dxj.model.Task;
+import com.dxj.scheduler.Scheduler;
 import com.dxj.util.JobUtil;
 import com.dxj.util.TaskUtil;
 
@@ -14,7 +15,7 @@ import java.util.List;
 /**
  * Parallelizing video transcoding with load balancing on cloud computing
  */
-public class BS_EFT {
+public class BS_EFT implements Scheduler{
 
     public double schedule(Job job) {
         List<Task> tasks = job.getTasks();
@@ -36,12 +37,10 @@ public class BS_EFT {
         });
 
         int m = nodes.size();
-        double delay = 10;
+        double delay = 5;
         double finalFt = Double.MAX_VALUE, minSpan = Double.MAX_VALUE;
         int c1 = totalComplexity,bestC = 0;
-        int round = totalComplexity / 2;
-        int j = 0;
-        while (j++ <= round && c1 > 0) {
+        while (c1 > 0) {
             int localSumComplexity = 0;
             List<Task> localTasks = new ArrayList<>(), remoteTaks = new ArrayList<>();
             int i = 0;
@@ -168,11 +167,12 @@ public class BS_EFT {
             }
 
             JobUtil.clear(job);
-            c1 -= 1;
+            c1 -= 5;
         }
 
         double ft_average = totalComplexity / sumCapacity + delay * tasks.size() / m;
-        System.out.println("ft_average: " + ft_average + "; minSpan: " + minSpan);
+
+        System.out.println("ft_average: " + ft_average + "; minSpan: " + minSpan + " ;OptimalMakeSpan: " + (m*ft_average));
         job.setMakespan(minSpan);
 
 

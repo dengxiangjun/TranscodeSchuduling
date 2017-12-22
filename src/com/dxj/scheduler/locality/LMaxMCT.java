@@ -3,6 +3,7 @@ package com.dxj.scheduler.locality;
 import com.dxj.model.Job;
 import com.dxj.model.Node;
 import com.dxj.model.Task;
+import com.dxj.scheduler.Scheduler;
 import com.dxj.util.TaskUtil;
 
 import java.util.Collections;
@@ -13,7 +14,7 @@ import java.util.List;
  * Parallelizing Video Transcoding Using Map-Reduce-Based Cloud Computing
  * LocalityMaxMCT调度算法
  */
-public class LMaxMCT {
+public class LMaxMCT  implements Scheduler {
 
     public double schedule(Job job) {
         List<Task> tasks = job.getTasks();
@@ -43,8 +44,9 @@ public class LMaxMCT {
         for (Node node : nodes) {
             sumCapacity += node.getCapacity();
         }
-        int delay = 10, n = tasks.size(),m = nodes.size();
+        int delay = 5, n = tasks.size(),m = nodes.size();
         double f_average = sumComplexity / sumCapacity + delay * n / m,sumMakespan = 0;
+
         int j = 0;
         for (int i = 0; i < n;) {
             Task task = tasks.get(i);

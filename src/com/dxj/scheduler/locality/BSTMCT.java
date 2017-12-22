@@ -3,6 +3,7 @@ package com.dxj.scheduler.locality;
 import com.dxj.model.Job;
 import com.dxj.model.Node;
 import com.dxj.model.Task;
+import com.dxj.scheduler.Scheduler;
 import com.dxj.util.TaskUtil;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.List;
 /**
  * Parallelizing video transcoding with load balancing on cloud computing
  */
-public class BSTMCT {
+public class BSTMCT  implements Scheduler {
 
     public double schedule(Job job) {
         List<Task> tasks = job.getTasks();

@@ -4,6 +4,7 @@ import com.dxj.model.Job;
 import com.dxj.model.Node;
 import com.dxj.model.Rack;
 import com.dxj.model.Task;
+import com.dxj.scheduler.Scheduler;
 import com.dxj.util.TaskUtil;
 
 import java.util.*;
@@ -12,12 +13,12 @@ import java.util.*;
  * Prediction-based and Locality-aware Task Scheduling for Parallelizing Video Transcoding over Heterogeneous MapReduce Cluster
  * PLTS算法
  */
-public class PLTS {
+public class PLTS  implements Scheduler {
 
     public double schedule(Job app) {
         List<Task> tasks = app.getTasks();
         List<Node> nodes = app.getNodes();
-        int delay = 10;
+        int delay = 5;
         List<Integer> assignedTask = new ArrayList<>();//已经分配的列表
         int sigma = 12;
         int taskCount = tasks.size();

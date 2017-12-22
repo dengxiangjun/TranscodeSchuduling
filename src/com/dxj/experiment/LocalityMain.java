@@ -4,6 +4,7 @@ import com.dxj.model.Job;
 import com.dxj.model.Node;
 import com.dxj.model.Rack;
 import com.dxj.model.Task;
+import com.dxj.scheduler.Scheduler;
 import com.dxj.scheduler.locality.*;
 import com.dxj.util.RackUtil;
 import com.dxj.util.Random;
@@ -11,14 +12,50 @@ import com.dxj.util.JobUtil;
 import com.dxj.util.TaskUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 考虑分片的通信开销和数据本地性
  */
 public class LocalityMain {
+    private static Scheduler lmct = new LMCT();
+    private static Scheduler lMaxMCT = new LMaxMCT();
+    private static Scheduler lmlft = new LMLFT();
+    private static Scheduler plts = new PLTS();
+    private static Scheduler bs_eft = new BS_EFT();
+    private static Scheduler bs_eft2 = new BS_EFT();
+    private static Map<String, Double> timeMap = new HashMap<>(),makeSpanMap = new HashMap<>();
 
     public static void main(String[] args) {
+        timeMap.put("lmct", 0.0);
+        timeMap.put("lMaxMCT", 0.0);
+        timeMap.put("lmlft", 0.0);
+        timeMap.put("plts", 0.0);
+        timeMap.put("bs_eft", 0.0);
+        timeMap.put("bs_eft2", 0.0);
+        timeMap.put("average", 0.0);
+
+        makeSpanMap.put("lmct", 0.0);
+        makeSpanMap.put("lMaxMCT", 0.0);
+        makeSpanMap.put("lmlft", 0.0);
+        makeSpanMap.put("plts", 0.0);
+        makeSpanMap.put("bs_eft", 0.0);
+        makeSpanMap.put("bs_eft2", 0.0);
+        for (int i = 0; i < 10; i++) {
+            test();
+        }
+        for (Map.Entry<String,Double> entry : timeMap.entrySet()){
+            System.out.println(entry.getKey()+" "+ (entry.getValue()/10.0));
+        }
+        System.out.println("------------------------------------------");
+        for (Map.Entry<String,Double> entry : makeSpanMap.entrySet()){
+            System.out.println(entry.getKey()+" "+ (entry.getValue()/10.0));
+        }
+    }
+
+    public static void test() {
         List<Node> nodes = new ArrayList<>();
         List<Task> tasks = new ArrayList<>();
 
@@ -41,9 +78,9 @@ public class LocalityMain {
 
         RackUtil.checkNodesDistribution(racks);
 
-        for (int i = 0; i < 60; i++) {
+        for (int i = 0; i < 30; i++) {
 
-            int complexity = Random.nextInt(40, 80);
+            int complexity = Random.nextInt(40, 100);
             double segmentSize = complexity * Random.nextDouble(0.8, 1.2);
             int rackNum = Random.nextInt(0, rackCount), otherRackNum = Random.nextInt(0, rackCount);
             while (rackNum == otherRackNum) otherRackNum = (rackNum + Random.nextInt(0, rackCount)) % rackCount;
@@ -63,18 +100,21 @@ public class LocalityMain {
             }
         }
 
-        Job job = new Job(nodes, tasks,racks);
+        Job job = new Job(nodes, tasks, racks);
 
-        LMCT lmct = new LMCT();
+        lmct = new LMCT();
         double lmctFt = lmct.schedule(job);
-        System.out.println("LMCT算法调度结果: " + lmctFt + " ;makespan "+ job.getMakespan());
+        System.out.println("LMCT算法调度结果: " + lmctFt + " ;makespan " + job.getMakespan());
+        timeMap.put("lmct",timeMap.get("lmct") + lmctFt);
+        makeSpanMap.put("lmct",makeSpanMap.get("lmct") + job.getMakespan());
 
         JobUtil.clear(job);
 
-        LMaxMCT lMaxMCT = new LMaxMCT();
+        lMaxMCT = new LMaxMCT();
         double localityMaxMCTFt = lMaxMCT.schedule(job);
-        System.out.println("LocalityMaxMCT算法调度结果: " + localityMaxMCTFt + " ;makespan "+ job.getMakespan());
-
+        System.out.println("LocalityMaxMCT算法调度结果: " + localityMaxMCTFt + " ;makespan " + job.getMakespan());
+        timeMap.put("lMaxMCT",timeMap.get("lMaxMCT") + localityMaxMCTFt);
+        makeSpanMap.put("lMaxMCT",makeSpanMap.get("lMaxMCT") + job.getMakespan());
         JobUtil.clear(job);
 
 //        NewMaxMCT newMaxMCT = new NewMaxMCT();
@@ -83,9 +123,11 @@ public class LocalityMain {
 //
 //        JobUtil.clear(job);
 
-        LMLFT lmlft = new LMLFT();
+        lmlft = new LMLFT();
         double lmlftFt = lmlft.schedule(job);
-        System.out.println("LMLFT算法调度结果: " + lmlftFt + " ;makespan "+ job.getMakespan());
+        System.out.println("LMLFT算法调度结果: " + lmlftFt + " ;makespan " + job.getMakespan());
+        timeMap.put("lmlft",timeMap.get("lmlft") + lmlftFt);
+        makeSpanMap.put("lmlft",makeSpanMap.get("lmlft") + job.getMakespan());
         JobUtil.clear(job);
 
 //        LMLFT3 lmlft3 = new LMLFT3();
@@ -103,10 +145,11 @@ public class LocalityMain {
 //        System.out.println("BSTMCT算法调度结果: " + bstmctFt);
 //        JobUtil.clear(job);
 
-        PLTS plts = new PLTS();
+        plts = new PLTS();
         double pltsFt = plts.schedule(job);
-        System.out.println("PLTS算法调度结果: " + pltsFt + " ;makespan "+ job.getMakespan());
-
+        System.out.println("PLTS算法调度结果: " + pltsFt + " ;makespan " + job.getMakespan());
+        timeMap.put("plts",timeMap.get("plts") + pltsFt);
+        makeSpanMap.put("plts",makeSpanMap.get("plts") + job.getMakespan());
         JobUtil.clear(job);
 
 //        LMergeMaxMCT lMergeMaxMCT = new LMergeMaxMCT();
@@ -142,9 +185,11 @@ public class LocalityMain {
 //        System.out.println("HJ4算法调度结果: " + hj4Ft);
 
         JobUtil.clear(job);
-        BS_EFT bs_eft = new BS_EFT();
+        bs_eft = new BS_EFT();
         double bs_eftFt = bs_eft.schedule(job);
-        System.out.println("BS_EFT算法调度结果: " + bs_eftFt + " ;makespan "+ job.getMakespan());
+        System.out.println("BS_EFT算法调度结果: " + bs_eftFt + " ;makespan " + job.getMakespan());
+        timeMap.put("bs_eft",timeMap.get("bs_eft") + bs_eftFt);
+        makeSpanMap.put("bs_eft",makeSpanMap.get("bs_eft") + job.getMakespan());
         JobUtil.clear(job);
 
 //        pltsFt = plts.schedule(job);
@@ -162,9 +207,11 @@ public class LocalityMain {
 //        System.out.println("BS_EFT1算法调度结果: " + bs_eft1Ft + " ;makespan "+ job.getMakespan());
 //        JobUtil.clear(job);
 
-        BS_EFT2 bs_eft2 = new BS_EFT2();
+        bs_eft2 = new BS_EFT2();
         double bs_eft2Ft = bs_eft2.schedule(job);
-        System.out.println("BS_EFT2算法调度结果: " + bs_eft2Ft + " ;makespan "+ job.getMakespan());
+        System.out.println("BS_EFT2算法调度结果: " + bs_eft2Ft + " ;makespan " + job.getMakespan());
+        timeMap.put("bs_eft2",timeMap.get("bs_eft2") + bs_eft2Ft);
+        makeSpanMap.put("bs_eft2",makeSpanMap.get("bs_eft2") + job.getMakespan());
         JobUtil.clear(job);
     }
 }

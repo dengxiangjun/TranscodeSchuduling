@@ -5,9 +5,9 @@ import com.dxj.model.Node;
 import com.dxj.model.Rack;
 import com.dxj.model.Task;
 import com.dxj.scheduler.locality.*;
-import com.dxj.util.JobUtil;
 import com.dxj.util.RackUtil;
 import com.dxj.util.Random;
+import com.dxj.util.JobUtil;
 import com.dxj.util.TaskUtil;
 
 import java.util.ArrayList;
@@ -28,9 +28,9 @@ public class Example {
             racks.add(new Rack(i));
         }
 
-        for (int i = 0; i < 5; i++) {
-            double capacity = i + 1;
-            Rack rack = racks.get(i % 3);//随机选取一个机架
+        for (int i = 0; i < 10; i++) {
+            double capacity = Random.nextDouble(1.0, 5.0);
+            Rack rack = racks.get(Random.nextInt(0, rackCount));//随机选取一个机架
 
             Node node = new Node("node_" + i, capacity, rack);
             nodes.add(node);
@@ -39,21 +39,21 @@ public class Example {
             rack.setNodes(rackNodes);
         }
 
-       // RackUtil.checkNodesDistribution(racks);
+        RackUtil.checkNodesDistribution(racks);
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 30; i++) {
 
-            int complexity = 50 + i;
-            double segmentSize = complexity;
-            int rackNum = i % 3, otherRackNum = (i + 1) % 3 ;
-            //while (rackNum == otherRackNum) otherRackNum = (rackNum + Random.nextInt(0, rackCount)) % rackCount;
+            int complexity = Random.nextInt(40, 100);
+            double segmentSize = complexity * Random.nextDouble(0.8, 1.2);
+            int rackNum = Random.nextInt(0, rackCount), otherRackNum = Random.nextInt(0, rackCount);
+            while (rackNum == otherRackNum) otherRackNum = (rackNum + Random.nextInt(0, rackCount)) % rackCount;
 
             Rack rack = racks.get(rackNum), otherRack = racks.get(otherRackNum);
             List<Node> rackNodes = rack.getNodes(), otherRackNodes = otherRack.getNodes();
             List<Node> location = TaskUtil.segmentPlacement(rackNodes, otherRackNodes);
 
             Task task = new Task("task_" + i, complexity, segmentSize, location);
-           // task.initSubTask(5, 20);
+            task.initSubTask(5, 20);
             tasks.add(task);
 
             for (Node node : location) {
@@ -63,17 +63,17 @@ public class Example {
             }
         }
 
-        Job job = new Job(nodes, tasks, racks);
+        Job job = new Job(nodes, tasks,racks);
 
         LMCT lmct = new LMCT();
         double lmctFt = lmct.schedule(job);
-        System.out.println("LMCT算法调度结果: " + lmctFt + " ;makespan " + job.getMakespan());
+        System.out.println("LMCT算法调度结果: " + lmctFt + " ;makespan "+ job.getMakespan());
 
         JobUtil.clear(job);
 
         LMaxMCT lMaxMCT = new LMaxMCT();
         double localityMaxMCTFt = lMaxMCT.schedule(job);
-        System.out.println("LocalityMaxMCT算法调度结果: " + localityMaxMCTFt + " ;makespan " + job.getMakespan());
+        System.out.println("LocalityMaxMCT算法调度结果: " + localityMaxMCTFt + " ;makespan "+ job.getMakespan());
 
         JobUtil.clear(job);
 
@@ -85,7 +85,7 @@ public class Example {
 
         LMLFT lmlft = new LMLFT();
         double lmlftFt = lmlft.schedule(job);
-        System.out.println("LMLFT算法调度结果: " + lmlftFt + " ;makespan " + job.getMakespan());
+        System.out.println("LMLFT算法调度结果: " + lmlftFt + " ;makespan "+ job.getMakespan());
         JobUtil.clear(job);
 
 //        LMLFT3 lmlft3 = new LMLFT3();
@@ -105,7 +105,7 @@ public class Example {
 
         PLTS plts = new PLTS();
         double pltsFt = plts.schedule(job);
-        System.out.println("PLTS算法调度结果: " + pltsFt + " ;makespan " + job.getMakespan());
+        System.out.println("PLTS算法调度结果: " + pltsFt + " ;makespan "+ job.getMakespan());
 
         JobUtil.clear(job);
 
@@ -144,22 +144,27 @@ public class Example {
         JobUtil.clear(job);
         BS_EFT bs_eft = new BS_EFT();
         double bs_eftFt = bs_eft.schedule(job);
-        System.out.println("BS_EFT算法调度结果: " + bs_eftFt + " ;makespan " + job.getMakespan());
+        System.out.println("BS_EFT算法调度结果: " + bs_eftFt + " ;makespan "+ job.getMakespan());
         JobUtil.clear(job);
 
-        pltsFt = plts.schedule(job);
-        System.out.println("PLTS算法调度结果: " + pltsFt + " ;makespan " + job.getMakespan());
+//        pltsFt = plts.schedule(job);
+//        System.out.println("PLTS算法调度结果: " + pltsFt + " ;makespan "+ job.getMakespan());
+//
+//        JobUtil.clear(job);
+//
+//        bs_eftFt = bs_eft.schedule(job);
+//        System.out.println("BS_EFT算法调度结果: " + bs_eftFt + " ;makespan "+ job.getMakespan());
+//
+//        JobUtil.clear(job);
+//
+//        BS_EFT1 bs_eft1 = new BS_EFT1();
+//        double bs_eft1Ft = bs_eft1.schedule(job);
+//        System.out.println("BS_EFT1算法调度结果: " + bs_eft1Ft + " ;makespan "+ job.getMakespan());
+//        JobUtil.clear(job);
 
-        JobUtil.clear(job);
-
-        bs_eftFt = bs_eft.schedule(job);
-        System.out.println("BS_EFT算法调度结果: " + bs_eftFt + " ;makespan " + job.getMakespan());
-
-        JobUtil.clear(job);
-
-        BS_EFT1 bs_eft1 = new BS_EFT1();
-        double bs_eft1Ft = bs_eft1.schedule(job);
-        System.out.println("BS_EFT1算法调度结果: " + bs_eft1Ft + " ;makespan " + job.getMakespan());
+        BS_EFT2 bs_eft2 = new BS_EFT2();
+        double bs_eft2Ft = bs_eft2.schedule(job);
+        System.out.println("BS_EFT2算法调度结果: " + bs_eft2Ft + " ;makespan "+ job.getMakespan());
         JobUtil.clear(job);
     }
 }

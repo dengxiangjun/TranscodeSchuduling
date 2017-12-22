@@ -3,6 +3,7 @@ package com.dxj.scheduler.locality;
 import com.dxj.model.Job;
 import com.dxj.model.Node;
 import com.dxj.model.Task;
+import com.dxj.scheduler.Scheduler;
 import com.dxj.util.JobUtil;
 import com.dxj.util.TaskUtil;
 
@@ -11,7 +12,7 @@ import java.util.*;
 /**
  * Parallelizing video transcoding with load balancing on cloud computing
  */
-public class BS_EFT2 {
+public class BS_EFT2  implements Scheduler {
 
     public double schedule(Job job) {
         List<Task> tasks = job.getTasks();
@@ -33,7 +34,7 @@ public class BS_EFT2 {
         });
 
         int m = nodes.size();
-        double delay = 10;
+        double delay = 5;
         double finalFt = Double.MAX_VALUE, minSpan = Double.MAX_VALUE;
         int c1 = totalComplexity,bestC = 0;
 

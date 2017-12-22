@@ -3,6 +3,7 @@ package com.dxj.scheduler.locality;
 import com.dxj.model.Job;
 import com.dxj.model.Node;
 import com.dxj.model.Task;
+import com.dxj.scheduler.Scheduler;
 import com.dxj.util.TaskUtil;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.List;
 /**
  * Parallelizing video transcoding with load balancing on cloud computing
  */
-public class LMLFT {
+public class LMLFT  implements Scheduler {
 
     public double schedule(Job job) {
         List<Task> tasks = job.getTasks();
@@ -27,7 +28,7 @@ public class LMLFT {
             sumCapacity += node.getCapacity();
         }
         int m = nodes.size(), k_th_max = 40;
-        double delay = 10, f_average = sumComplexity / sumCapacity + delay * tasks.size() / m;
+        double delay = 5, f_average = sumComplexity / sumCapacity + delay * tasks.size() / m;
        // System.out.println("f_average" + f_average);
         double jobFt = Double.MAX_VALUE,minSpan = Double.MAX_VALUE;
         for (int k_th = 1; k_th < k_th_max; k_th++) {
