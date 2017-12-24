@@ -44,7 +44,8 @@ public class LMaxMCT  implements Scheduler {
         for (Node node : nodes) {
             sumCapacity += node.getCapacity();
         }
-        int delay = 5, n = tasks.size(),m = nodes.size();
+        int n = tasks.size(),m = nodes.size();
+        double delay = job.getDelay();
         double f_average = sumComplexity / sumCapacity + delay * n / m,sumMakespan = 0;
 
         int j = 0;

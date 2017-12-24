@@ -28,7 +28,7 @@ public class BSTMCT  implements Scheduler {
             sumCapacity += node.getCapacity();
         }
         int m = nodes.size(), k_th_max = 40;
-        double delay = 10;
+        double delay = job.getDelay();
         double jobFt = Double.MAX_VALUE;
         for (int k_th = 1; k_th < k_th_max; k_th++) {
 

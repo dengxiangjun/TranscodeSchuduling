@@ -34,7 +34,7 @@ public class BS_EFT2  implements Scheduler {
         });
 
         int m = nodes.size();
-        double delay = 5;
+        double delay = job.getDelay();
         double finalFt = Double.MAX_VALUE, minSpan = Double.MAX_VALUE;
         int c1 = totalComplexity,bestC = 0;
 
@@ -183,7 +183,7 @@ public class BS_EFT2  implements Scheduler {
 
 
             JobUtil.clear(job);
-            c1 -= 5;
+            c1 -= 40;
         }
         job.setMakespan(minSpan);
         return finalFt;

@@ -23,7 +23,7 @@ public class HJ1 {
             sumCapacity += node.getCapacity();
         }
         int m = nodes.size();
-        double delay = 10;
+        double delay = job.getDelay();
 
         for (Task task : tasks){
             List<Node> location = task.getLocation();

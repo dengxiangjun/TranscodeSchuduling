@@ -25,7 +25,7 @@ public class HJ3 {
             sumCapacity += node.getCapacity();
         }
         int m = nodes.size();
-        double delay = 10;
+        double delay = job.getDelay();
         Collections.sort(tasks, new Comparator<Task>() {
             @Override
             public int compare(Task o1, Task o2) {

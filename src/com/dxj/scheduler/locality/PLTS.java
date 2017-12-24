@@ -18,7 +18,7 @@ public class PLTS  implements Scheduler {
     public double schedule(Job app) {
         List<Task> tasks = app.getTasks();
         List<Node> nodes = app.getNodes();
-        int delay = 5;
+        double delay = app.getDelay();
         List<Integer> assignedTask = new ArrayList<>();//已经分配的列表
         int sigma = 12;
         int taskCount = tasks.size();

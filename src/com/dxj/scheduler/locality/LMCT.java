@@ -27,7 +27,7 @@ public class LMCT  implements Scheduler {
 //            }
 //        });
         List<Node> nodes = app.getNodes();
-        int delay = 5;
+        double delay = app.getDelay();
         double sumComm = 0,sumMakespan = 0;
         for (Task task : tasks) {
             double minFt = Double.MAX_VALUE,minFtComm = 0,makespan = 0;
@@ -42,10 +42,11 @@ public class LMCT  implements Scheduler {
                     selectedNode = node;
                     minFtComm = comm;
                     makespan = predictMakespan;
-                    sumComm +=minFtComm;
+
                 }
             }
             TaskUtil.taskAssign(task, selectedNode, makespan, minFtComm, minFt);
+            sumComm +=minFtComm;
             sumMakespan += makespan;
 //            List<Task> nodeTasks = selectedNode.getTasks();
 //            nodeTasks.add(task);

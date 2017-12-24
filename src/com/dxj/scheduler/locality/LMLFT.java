@@ -28,7 +28,7 @@ public class LMLFT  implements Scheduler {
             sumCapacity += node.getCapacity();
         }
         int m = nodes.size(), k_th_max = 40;
-        double delay = 5, f_average = sumComplexity / sumCapacity + delay * tasks.size() / m;
+        double delay = job.getDelay(), f_average = sumComplexity / sumCapacity + delay * tasks.size() / m;
        // System.out.println("f_average" + f_average);
         double jobFt = Double.MAX_VALUE,minSpan = Double.MAX_VALUE;
         for (int k_th = 1; k_th < k_th_max; k_th++) {

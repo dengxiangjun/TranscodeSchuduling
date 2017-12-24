@@ -63,7 +63,7 @@ public class Example {
             }
         }
 
-        Job job = new Job(nodes, tasks,racks);
+        Job job = new Job(nodes, tasks,racks,5);
 
         LMCT lmct = new LMCT();
         double lmctFt = lmct.schedule(job);

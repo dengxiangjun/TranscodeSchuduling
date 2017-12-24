@@ -8,6 +8,15 @@ public class Job {
     private List<Rack> racks;
     private double comm;//通信开销
     private double makespan;
+    private double delay;
+
+    public double getDelay() {
+        return delay;
+    }
+
+    public void setDelay(double delay) {
+        this.delay = delay;
+    }
 
     public double getMakespan() {
         return makespan;
@@ -25,10 +34,11 @@ public class Job {
         this.comm = comm;
     }
 
-    public Job(List<Node> nodes, List<Task> tasks,List<Rack> racks) {
+    public Job(List<Node> nodes, List<Task> tasks,List<Rack> racks,double delay) {
         this.nodes = nodes;
         this.tasks = tasks;
         this.racks = racks;
+        this.delay = delay;
     }
 
     public Job(List<Node> nodes, List<Task> tasks) {

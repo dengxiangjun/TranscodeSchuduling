@@ -25,7 +25,7 @@ public class HJ4 {
             sumCapacity += node.getCapacity();
         }
         int m = nodes.size();
-        double delay = 10;
+        double delay = job.getDelay();
         double time = Double.MAX_VALUE, finalFt = Double.MAX_VALUE;
         int c1 = totalComplexity, c2 = totalComplexity - c1;
         int round = totalComplexity / 2;

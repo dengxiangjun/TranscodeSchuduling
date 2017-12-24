@@ -44,7 +44,8 @@ public class NewMaxMCT {
         for (Node node : nodes) {
             sumCapacity += node.getCapacity();
         }
-        int delay = 10, n = tasks.size(), m = nodes.size();
+        double delay = job.getDelay();
+        int n = tasks.size(), m = nodes.size();
         double comm_average = TaskUtil.getAverageCommnicationTime(sumSize,m);
         double f_average = sumComplexity / sumCapacity + comm_average + delay * n / m;
         int j = 0;

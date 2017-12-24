@@ -36,7 +36,8 @@ public class RankMCT {
         for (Node node : nodes) {
             sumCapacity += node.getCapacity();
         }
-        int delay = 10, n = tasks.size(), m = nodes.size();
+        double delay = job.getDelay();
+        int  n = tasks.size(), m = nodes.size();
         double f_average = sumComplexity / sumCapacity + delay * n / m;
         List<String> assignedTask = new ArrayList<>();//已经分配的列表
 

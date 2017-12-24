@@ -37,7 +37,7 @@ public class BS_EFT implements Scheduler{
         });
 
         int m = nodes.size();
-        double delay = 5;
+        double delay = job.getDelay();
         double finalFt = Double.MAX_VALUE, minSpan = Double.MAX_VALUE;
         int c1 = totalComplexity,bestC = 0;
         while (c1 > 0) {
